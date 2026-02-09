@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Src\Shared\Infrastructure\Laravel\Providers;
 
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
@@ -32,6 +34,15 @@ final class SharedServiceProvider extends BaseContextServiceProvider
                 ]
             );
         });
+        $this->app->bind(ClientInterface::class, static function (): ClientInterface {
+            return new Client([
+                'timeout' => 10,
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ]);
+        });
+
         parent::register();
     }
 

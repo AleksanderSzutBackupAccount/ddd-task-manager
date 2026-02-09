@@ -12,9 +12,9 @@ readonly class Email extends NotEmptyString
     /**
      * @throws InvalidValueObjectException
      */
-    public static function fromString(string $email): self
+    public static function fromString(string $email): static
     {
-        return new self($email);
+        return new static($email);
     }
 
     protected function validate(): void

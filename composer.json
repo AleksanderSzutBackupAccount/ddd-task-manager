@@ -74,6 +74,11 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "check": [
+            "./vendor/bin/phpstan",
+            "./vendor/bin/deptrac",
+            "./vendor/bin/phpunit"
         ]
     },
     "extra": {
