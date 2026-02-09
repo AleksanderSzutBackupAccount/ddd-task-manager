@@ -16,12 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, bcmath, pdo_mysql
+          tools: composer:v2
+
       - name: Cache Composer dependencies
         id: composer-cache
         uses: actions/cache@v4
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php84-composer-${{ hashFiles('**/composer.lock') }}
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-scripts --no-progress
@@ -45,6 +52,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+
       - name: Download vendor directory
         uses: actions/download-artifact@v4
         with:
@@ -61,6 +74,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+
       - name: Download vendor directory
         uses: actions/download-artifact@v4
         with:
@@ -76,6 +95,12 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
 
       - name: Download vendor directory
         uses: actions/download-artifact@v4
@@ -108,6 +133,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, bcmath, pdo_mysql
+          tools: composer:v2
+
       - name: Download vendor directory
         uses: actions/download-artifact@v4
         with:
@@ -118,13 +150,6 @@ jobs:
         run: |
           cp .env.tests .env
           php artisan key:generate
-
-      # best practice is running test in prod container
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-          extensions: mbstring, bcmath, pdo_mysql
 
       - name: Wait for MySQL to be ready
         run: |
