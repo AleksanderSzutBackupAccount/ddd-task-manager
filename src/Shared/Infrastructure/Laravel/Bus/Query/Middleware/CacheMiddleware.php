@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Bus\Query\Middleware;
+namespace Src\Shared\Infrastructure\Laravel\Bus\Query\Middleware;
 
 use Illuminate\Support\Facades\Cache;
 use Src\Shared\Application\Bus\Query\CacheableQueryInterface;
+use Src\Shared\Application\Bus\Query\Middleware\QueryMiddleware;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
 class CacheMiddleware implements QueryMiddleware

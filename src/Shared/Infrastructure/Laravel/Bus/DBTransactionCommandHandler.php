@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Bus;
+namespace Src\Shared\Infrastructure\Laravel\Bus;
 
 use Illuminate\Contracts\Bus\Dispatcher;
+use Src\Shared\Application\Bus\DBTransactionCommandHandlerInterface;
 use Src\Shared\Domain\Bus\CommandInterface;
 
 readonly class DBTransactionCommandHandler implements DBTransactionCommandHandlerInterface

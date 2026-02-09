@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Bus\Query;
+namespace Src\Shared\Infrastructure\Laravel\Bus;
 
 use Closure;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Src\Shared\Application\Bus\Query\Middleware\QueryMiddleware;
+use Src\Shared\Application\Bus\Query\QueryBusInterface;
+use Src\Shared\Application\Bus\Query\QueryInterface;
 
 final readonly class QueryBus implements QueryBusInterface
 {

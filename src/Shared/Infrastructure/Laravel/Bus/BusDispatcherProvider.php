@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Bus;
+namespace Src\Shared\Infrastructure\Laravel\Bus;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
+use Src\Shared\Application\Bus\CommandHandlerProviderInterface;
 
 abstract class BusDispatcherProvider extends ServiceProvider implements CommandHandlerProviderInterface
 {

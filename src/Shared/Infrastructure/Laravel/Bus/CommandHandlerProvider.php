@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Bus;
+namespace Src\Shared\Infrastructure\Laravel\Bus;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Shared\Application\Bus\CommandHandlerInterface;
+use Src\Shared\Application\Bus\DBTransactionCommandHandlerInterface;
 
 class CommandHandlerProvider extends ServiceProvider
 {

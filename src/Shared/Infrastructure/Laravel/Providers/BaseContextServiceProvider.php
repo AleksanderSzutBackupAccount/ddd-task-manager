@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Infrastructure\Providers;
+namespace Src\Shared\Infrastructure\Laravel\Providers;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Facades\Gate;

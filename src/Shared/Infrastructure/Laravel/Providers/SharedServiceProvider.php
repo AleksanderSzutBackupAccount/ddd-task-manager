@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Providers;
+namespace Src\Shared\Infrastructure\Laravel\Providers;
 
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Src\Shared\Application\Bus\CommandHandler;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
-use Src\Shared\Application\Bus\Query\Middleware\CacheMiddleware;
-use Src\Shared\Application\Bus\Query\QueryBus;
 use Src\Shared\Application\Bus\Query\QueryBusInterface;
 use Src\Shared\Domain\Bus\EventBusInterface;
-use Src\Shared\Infrastructure\Bus\EventBusLaravel;
-use Src\Shared\Infrastructure\Providers\BaseContextServiceProvider;
+use Src\Shared\Infrastructure\Laravel\Bus\CommandHandler;
+use Src\Shared\Infrastructure\Laravel\Bus\EventBusLaravel;
+use Src\Shared\Infrastructure\Laravel\Bus\Query\Middleware\CacheMiddleware;
+use Src\Shared\Infrastructure\Laravel\Bus\QueryBus;
 
 final class SharedServiceProvider extends BaseContextServiceProvider
 {

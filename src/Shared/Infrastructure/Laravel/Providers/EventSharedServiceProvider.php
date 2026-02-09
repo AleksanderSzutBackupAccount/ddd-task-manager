@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Providers;
+namespace Src\Shared\Infrastructure\Laravel\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 

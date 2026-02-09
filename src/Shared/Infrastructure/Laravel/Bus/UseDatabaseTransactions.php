@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Application\Bus;
+namespace Src\Shared\Infrastructure\Laravel\Bus;
 
 use Closure;
 use Illuminate\Support\Facades\DB;

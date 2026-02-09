@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Infrastructure\Casts;
+namespace Src\Shared\Infrastructure\Laravel\Casts;
 
 use Src\Shared\Domain\ValueObjects\ValueObjectInterface;
 
