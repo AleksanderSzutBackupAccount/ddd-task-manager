@@ -78,6 +78,7 @@
         ],
         "check": [
             "./vendor/bin/phpstan",
+            "./vendor/bin/pint",
             "./vendor/bin/deptrac",
             "./vendor/bin/phpunit"
         ]
