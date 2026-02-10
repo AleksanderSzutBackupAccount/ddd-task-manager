@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-
 namespace Src\Identity\Infrastructure\Laravel\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Src\Backoffice\Catalog\Infrastructure\Eloquent\Factories\CategoryAttributeEloquentFactory;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use Src\Identity\Domain\User;
 use Src\Identity\Domain\ValueObjects\UserEmail;
 use Src\Identity\Domain\ValueObjects\UserExternalId;
 use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Identity\Domain\ValueObjects\UserName;
 use Src\Shared\Infrastructure\Laravel\CastableModel;
-
 
 /**
  * @property-read UserId $id,
@@ -26,8 +24,16 @@ use Src\Shared\Infrastructure\Laravel\CastableModel;
  */
 final class UserModel extends CastableModel
 {
+    /** @use HasFactory<UserFactory>*/
+    use HasFactory;
 
     protected $table = 'users';
+
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
+
     protected $fillable = [
         'id',
         'name',
@@ -45,7 +51,6 @@ final class UserModel extends CastableModel
         'created_at' => 'immutable_datetime',
         'updated_at' => 'immutable_datetime',
     ];
-
 
     public function toEntity(): User
     {

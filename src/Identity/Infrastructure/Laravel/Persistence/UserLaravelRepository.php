@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Src\Identity\Domain\User;
 use Src\Identity\Domain\UserCollection;
 use Src\Identity\Domain\UserRepository;
+use Src\Identity\Domain\ValueObjects\UserEmail;
 use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Identity\Infrastructure\Laravel\Models\UserModel;
 
@@ -29,6 +30,14 @@ final class UserLaravelRepository implements UserRepository
     {
         /** @var UserModel|null $model */
         $model = UserModel::query()->where('id', $id)->first();
+
+        return $model?->toEntity();
+    }
+
+    public function findByEmail(UserEmail $email): ?User
+    {
+        /** @var UserModel|null $model */
+        $model = UserModel::query()->where('email', $email)->first();
 
         return $model?->toEntity();
     }
