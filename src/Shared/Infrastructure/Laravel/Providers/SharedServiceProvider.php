@@ -36,7 +36,9 @@ final class SharedServiceProvider extends BaseContextServiceProvider
     public function register(): void
     {
         $this->app->singleton(LcobucciConfigProvider::class, function () {
-            return new LcobucciConfigProvider(config('app.key'));
+            /** @var non-empty-string $appKey*/
+            $appKey  = config('app.key');
+            return new LcobucciConfigProvider($appKey);
         });
         $this->app->singleton(QueryBusInterface::class, function ($app) {
             /** @var Application $app */
@@ -47,14 +49,7 @@ final class SharedServiceProvider extends BaseContextServiceProvider
                 ]
             );
         });
-        $this->app->bind(ClientInterface::class, static function (): ClientInterface {
-            return new Client([
-                'timeout' => 10,
-                'headers' => [
-                    'Accept' => 'application/json',
-                ],
-            ]);
-        });
+
 
         parent::register();
     }
