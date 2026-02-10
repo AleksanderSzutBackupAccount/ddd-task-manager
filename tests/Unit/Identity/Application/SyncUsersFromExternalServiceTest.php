@@ -33,4 +33,81 @@ final class SyncUsersFromExternalServiceTest extends TestCase
 
         $this->assertEquals(2, $count);
     }
+
+    public function test_it_returns_zero_when_no_users_fetched(): void
+    {
+        $provider = $this->createMock(ExternalUserProvider::class);
+        $provider->expects($this->once())
+            ->method('fetchUsers')
+            ->willReturn([]);
+
+        $repository = $this->createMock(UserRepository::class);
+        $repository->expects($this->never())
+            ->method('upsert');
+
+        $service = new SyncUsersFromExternalService($provider, $repository);
+        $count = $service->sync();
+
+        $this->assertEquals(0, $count);
+    }
+
+    public function test_it_propagates_exception_from_provider(): void
+    {
+        $provider = $this->createMock(ExternalUserProvider::class);
+        $provider->expects($this->once())
+            ->method('fetchUsers')
+            ->willThrowException(new \Exception('Provider error'));
+
+        $repository = $this->createMock(UserRepository::class);
+
+        $service = new SyncUsersFromExternalService($provider, $repository);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provider error');
+
+        $service->sync();
+    }
+
+    public function test_it_stops_and_propagates_exception_from_repository(): void
+    {
+        $externalUser1 = new ExternalUser('1', 'johndoe', 'john@example.com', 'John Doe');
+
+        $provider = $this->createMock(ExternalUserProvider::class);
+        $provider->expects($this->once())
+            ->method('fetchUsers')
+            ->willReturn([$externalUser1]);
+
+        $repository = $this->createMock(UserRepository::class);
+        $repository->expects($this->once())
+            ->method('upsert')
+            ->willThrowException(new \Exception('Database error'));
+
+        $service = new SyncUsersFromExternalService($provider, $repository);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Database error');
+
+        $service->sync();
+    }
+
+    public function test_it_fails_when_external_user_has_invalid_email(): void
+    {
+        $externalUser1 = new ExternalUser('1', 'johndoe', 'invalid-email', 'John Doe');
+
+        $provider = $this->createMock(ExternalUserProvider::class);
+        $provider->expects($this->once())
+            ->method('fetchUsers')
+            ->willReturn([$externalUser1]);
+
+        $repository = $this->createMock(UserRepository::class);
+        $repository->expects($this->never())
+            ->method('upsert');
+
+        $service = new SyncUsersFromExternalService($provider, $repository);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid email address invalid-email');
+
+        $service->sync();
+    }
 }

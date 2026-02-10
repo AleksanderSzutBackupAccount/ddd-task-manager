@@ -19,10 +19,16 @@ final class SyncUsersCliCommand extends Command
      */
     public function handle(SyncUsersFromExternalService $sync): int
     {
-        $count = $sync->sync();
+        try {
+            $count = $sync->sync();
 
-        $this->info(sprintf('Synced %d users.', $count));
+            $this->info(sprintf('Synced %d users.', $count));
 
-        return self::SUCCESS;
+            return self::SUCCESS;
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
+            return self::FAILURE;
+        }
     }
 }
