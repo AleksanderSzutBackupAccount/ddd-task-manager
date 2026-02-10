@@ -10,9 +10,9 @@ use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validator;
-use Psr\Log\LoggerInterface;
 use Src\Identity\Application\Ports\TokenParserInterface;
 use Src\Identity\Domain\ValueObjects\UserId;
+use Src\Shared\Application\Log\LoggerInterface;
 
 final readonly class JwtTokenParser implements TokenParserInterface
 {
@@ -39,7 +39,6 @@ final readonly class JwtTokenParser implements TokenParserInterface
         } catch (\Throwable $e) {
             $this->logger->error('JWT Token parsing failed: '.$e->getMessage(), [
                 'exception' => $e,
-                'token' => $token,
             ]);
 
             return null;
