@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Identity\Application;
 
 use PHPUnit\Framework\TestCase;
-use Src\Identity\Application\Ports\TokenGeneratorInterface;
 use Src\Identity\Application\UseCases\LoginByEmail\LoginByEmailQuery;
 use Src\Identity\Application\UseCases\LoginByEmail\LoginByEmailQueryHandler;
 use Src\Identity\Domain\Exceptions\UserNotFoundException;
@@ -15,6 +14,7 @@ use Src\Identity\Domain\ValueObjects\UserEmail;
 use Src\Identity\Domain\ValueObjects\UserExternalId;
 use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Identity\Domain\ValueObjects\UserName;
+use Src\Shared\Application\Auth\TokenGeneratorInterface;
 
 final class LoginByEmailQueryHandlerTest extends TestCase
 {
@@ -48,7 +48,7 @@ final class LoginByEmailQueryHandlerTest extends TestCase
 
         $this->tokenGenerator->expects($this->once())
             ->method('generate')
-            ->with($user)
+            ->with($user->id->value, ['email' => $user->email->value])
             ->willReturn('generated-token');
 
         $query = new LoginByEmailQuery($emailStr);

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Src\Identity\Application\UseCases\LoginByEmail;
 
-use Src\Identity\Application\Ports\TokenGeneratorInterface;
 use Src\Identity\Domain\Exceptions\UserNotFoundException;
 use Src\Identity\Domain\UserRepository;
 use Src\Identity\Domain\ValueObjects\UserEmail;
+use Src\Shared\Application\Auth\TokenGeneratorInterface;
 use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
@@ -30,6 +30,6 @@ final readonly class LoginByEmailQueryHandler implements QueryHandlerInterface
             throw new UserNotFoundException;
         }
 
-        return $this->tokenGenerator->generate($user);
+        return $this->tokenGenerator->generate($user->id->value, ['email' => $user->email->value]);
     }
 }
