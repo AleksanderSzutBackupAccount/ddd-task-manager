@@ -4,46 +4,86 @@ declare(strict_types=1);
 
 namespace Src\Identity\Infrastructure\Lcobucci;
 
-use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key\InMemory;
-use Lcobucci\JWT\UnpermittedClaim;
+use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Validation\Constraint;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validator;
+use Psr\Log\LoggerInterface;
 use Src\Identity\Application\Ports\TokenParserInterface;
 use Src\Identity\Domain\ValueObjects\UserId;
 
 final readonly class JwtTokenParser implements TokenParserInterface
 {
-    public function __construct(private LcobucciConfigProvider $configProvider)
-    {
-    }
+    public function __construct(
+        private LcobucciConfigProvider $configProvider,
+        private LoggerInterface $logger
+    ) {}
 
     /**
-     * @param non-empty-string $token
-     * @return UserId|null
+     * @param  non-empty-string  $token
      */
     public function parse(string $token): ?UserId
     {
         try {
-            $token = $this->configProvider->config->parser()->parse($token);
+            $parsedToken = $this->getParsedToken($token);
 
-            $constraints = [
-                new SignedWith($this->configProvider->config->signer(), $this->configProvider->config->signingKey()),
-                new IssuedBy('coalition-backend'),
-                new PermittedFor('coalition-frontend'),
-            ];
-
-            if (! $this->configProvider->config->validator()->validate($token, ...$constraints)) {
+            if (! $this->getValidator()->validate($parsedToken, ...$this->getConstraints())) {
                 return null;
             }
 
-            $uid = $token->claims()->get('uid');
+            $uid = $this->getClaimFromToken($parsedToken, LcobucciConfigProvider::CLAIM_UID);
 
-            return new UserId((string) $uid);
-        } catch (\Throwable) {
+            return new UserId($uid);
+        } catch (\Throwable $e) {
+            $this->logger->error('JWT Token parsing failed: '.$e->getMessage(), [
+                'exception' => $e,
+                'token' => $token,
+            ]);
+
             return null;
         }
+    }
+
+    /**
+     * @param  non-empty-string  $plainToken
+     */
+    private function getParsedToken(string $plainToken): UnencryptedToken
+    {
+        $token = $this->configProvider->config->parser()->parse($plainToken);
+
+        assert($token instanceof UnencryptedToken);
+
+        return $token;
+    }
+
+    private function getValidator(): Validator
+    {
+        return $this->configProvider->config->validator();
+    }
+
+    /**
+     * @return Constraint[]
+     */
+    private function getConstraints(): array
+    {
+        return [
+            new SignedWith($this->configProvider->config->signer(), $this->configProvider->config->signingKey()),
+            new IssuedBy(LcobucciConfigProvider::ISSUER),
+            new PermittedFor(LcobucciConfigProvider::PERMITTED_FOR),
+        ];
+    }
+
+    /**
+     * @param  non-empty-string  $claim
+     * @return non-empty-string
+     */
+    public function getClaimFromToken(UnencryptedToken $parsedToken, string $claim): mixed
+    {
+        /** @var non-empty-string $claim */
+        $claim = $parsedToken->claims()->get($claim);
+
+        return $claim;
     }
 }

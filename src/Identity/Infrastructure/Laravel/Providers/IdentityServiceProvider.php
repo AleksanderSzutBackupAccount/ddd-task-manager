@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Identity\Infrastructure\Providers;
+namespace Src\Identity\Infrastructure\Laravel\Providers;
 
 use Src\Identity\Application\Ports\ExternalUserProvider;
 use Src\Identity\Application\Ports\TokenGeneratorInterface;
@@ -40,9 +40,9 @@ final class IdentityServiceProvider extends BaseContextServiceProvider
 
     public function register(): void
     {
-        /** @var non-empty-string $appKey */
-        $appKey = config('app.key');
-        $this->app->bind(LcobucciConfigProvider::class, fn () => LcobucciConfigProvider::fromDecoded($appKey));
+        $appKey = (string) config('app.key');
+
+        $this->app->singleton(LcobucciConfigProvider::class, fn () => new LcobucciConfigProvider($appKey));
 
         parent::register();
     }

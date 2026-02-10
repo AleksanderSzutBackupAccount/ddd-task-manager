@@ -16,7 +16,7 @@ final readonly class MeController
 
     public function __invoke(Request $request): JsonResponse
     {
-        /** @var string $userId */
+        /** @var non-empty-string $userId */
         $userId = $request->attributes->get('auth_user_id');
 
         /** @var User $user */

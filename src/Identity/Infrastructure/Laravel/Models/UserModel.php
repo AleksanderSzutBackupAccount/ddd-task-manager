@@ -28,6 +28,10 @@ final class UserModel extends CastableModel
 
     protected $table = 'users';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected static function newFactory(): UserFactory
     {
         return UserFactory::new();

@@ -29,6 +29,9 @@ final readonly class AuthMiddleware
 
         $request->attributes->set('auth_user_id', $userId->value);
 
-        return $next($request);
+        /** @var Response $response */
+        $response = $next($request);
+
+        return $response;
     }
 }

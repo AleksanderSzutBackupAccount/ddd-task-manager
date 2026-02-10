@@ -9,8 +9,7 @@ use Src\Identity\Domain\ValueObjects\UserId;
 interface TokenParserInterface
 {
     /**
-     * @param non-empty-string $token
-     * @return UserId|null
+     * @param  non-empty-string  $token
      */
     public function parse(string $token): ?UserId;
 }
