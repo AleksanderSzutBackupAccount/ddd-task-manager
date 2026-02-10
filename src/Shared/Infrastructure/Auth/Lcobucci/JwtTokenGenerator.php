@@ -12,10 +12,9 @@ final readonly class JwtTokenGenerator implements TokenGeneratorInterface
     public function __construct(private LcobucciConfigProvider $configProvider) {}
 
     /**
-     * @param non-empty-string $subject
-     * @param array<non-empty-string, non-empty-string> $claims
-     * @param non-empty-string|null $ttl
-     * @return string
+     * @param  non-empty-string  $subject
+     * @param  array<non-empty-string, non-empty-string>  $claims
+     * @param  non-empty-string|null  $ttl
      */
     public function generate(string $subject, array $claims = [], ?string $ttl = null): string
     {

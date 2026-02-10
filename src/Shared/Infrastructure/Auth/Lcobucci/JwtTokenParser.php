@@ -34,7 +34,7 @@ final readonly class JwtTokenParser implements TokenParserInterface
             }
 
             return new TokenPayload(
-                (string)$parsedToken->claims()->get('sub'),
+                (string) $parsedToken->claims()->get('sub'),
                 $parsedToken->claims()->all()
             );
         } catch (\Throwable $e) {
@@ -74,5 +74,4 @@ final readonly class JwtTokenParser implements TokenParserInterface
             new PermittedFor(LcobucciConfigProvider::PERMITTED_FOR),
         ];
     }
-
 }

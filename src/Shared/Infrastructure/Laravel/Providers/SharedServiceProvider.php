@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Shared\Infrastructure\Laravel\Providers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Src\Shared\Application\Auth\TokenGeneratorInterface;
@@ -36,8 +34,9 @@ final class SharedServiceProvider extends BaseContextServiceProvider
     public function register(): void
     {
         $this->app->singleton(LcobucciConfigProvider::class, function () {
-            /** @var non-empty-string $appKey*/
-            $appKey  = config('app.key');
+            /** @var non-empty-string $appKey */
+            $appKey = config('app.key');
+
             return new LcobucciConfigProvider($appKey);
         });
         $this->app->singleton(QueryBusInterface::class, function ($app) {
@@ -49,7 +48,6 @@ final class SharedServiceProvider extends BaseContextServiceProvider
                 ]
             );
         });
-
 
         parent::register();
     }
