@@ -11,8 +11,8 @@ use Src\Shared\Domain\Exceptions\InvalidValueObjectException;
 final class SyncUsersCliCommand extends Command
 {
     protected $signature = 'identity:sync-users';
-    protected $description = 'Sync users from external provider (JSONPlaceholder) into local database';
 
+    protected $description = 'Sync users from external provider (JSONPlaceholder) into local database';
 
     /**
      * @throws InvalidValueObjectException

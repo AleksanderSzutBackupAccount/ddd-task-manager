@@ -4,26 +4,24 @@ declare(strict_types=1);
 
 namespace Src\Identity\Application\Services;
 
-
 use Src\Identity\Application\Ports\ExternalUserProvider;
 use Src\Identity\Domain\User;
 use Src\Identity\Domain\UserRepository;
 use Src\Identity\Domain\ValueObjects\UserEmail;
 use Src\Identity\Domain\ValueObjects\UserExternalId;
-use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Identity\Domain\ValueObjects\UserName;
 use Src\Shared\Domain\Exceptions\InvalidValueObjectException;
-use Src\Shared\Domain\ValueObjects\Email;
 
 final readonly class SyncUsersFromExternalService
 {
     public function __construct(
-        private  ExternalUserProvider $provider,
-        private  UserRepository $users,
+        private ExternalUserProvider $provider,
+        private UserRepository $users,
     ) {}
 
     /**
      * @return int number of synced users
+     *
      * @throws InvalidValueObjectException
      */
     public function sync(): int

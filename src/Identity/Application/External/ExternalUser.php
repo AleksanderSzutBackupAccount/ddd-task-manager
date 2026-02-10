@@ -10,9 +10,9 @@ namespace Src\Identity\Application\External;
 final readonly class ExternalUser
 {
     public function __construct(
-        public  string $externalId,
-        public  string $username,
-        public  string $email,
-        public  string $name,
+        public string $externalId,
+        public string $username,
+        public string $email,
+        public string $name,
     ) {}
 }

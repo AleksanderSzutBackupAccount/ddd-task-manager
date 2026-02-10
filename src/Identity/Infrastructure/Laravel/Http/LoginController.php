@@ -23,7 +23,7 @@ final readonly class LoginController
 
         /** @var string $token */
         $token = $this->queryBus->ask(
-            new LoginByEmailQuery((string)$request->input('email'))
+            new LoginByEmailQuery((string) $request->input('email'))
         );
 
         return new JsonResponse([

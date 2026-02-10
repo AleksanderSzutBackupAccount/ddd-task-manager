@@ -35,7 +35,7 @@ final class IdentityServiceProvider extends BaseContextServiceProvider
     {
         /** @var non-empty-string $appKey */
         $appKey = config('app.key');
-        $this->app->bind(JwtTokenGenerator::class,fn () =>  new JwtTokenGenerator($appKey));
+        $this->app->bind(JwtTokenGenerator::class, fn () => new JwtTokenGenerator($appKey));
 
         parent::register();
     }

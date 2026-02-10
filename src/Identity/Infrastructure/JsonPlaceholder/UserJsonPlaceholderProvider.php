@@ -13,7 +13,7 @@ final readonly class UserJsonPlaceholderProvider implements ExternalUserProvider
 {
     public function __construct(
         private ClientInterface $http,
-        private string          $baseUrl = 'https://jsonplaceholder.typicode.com',
+        private string $baseUrl = 'https://jsonplaceholder.typicode.com',
     ) {}
 
     /**
@@ -21,7 +21,7 @@ final readonly class UserJsonPlaceholderProvider implements ExternalUserProvider
      */
     public function fetchUsers(): array
     {
-        $response = $this->http->request('GET', rtrim($this->baseUrl, '/') . '/users', [
+        $response = $this->http->request('GET', rtrim($this->baseUrl, '/').'/users', [
             'headers' => [
                 'Accept' => 'application/json',
             ],

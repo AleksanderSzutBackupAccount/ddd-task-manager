@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Src\Shared\Infrastructure\Laravel\Providers;
 
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Src\Shared\Application\Bus\CommandHandlerInterface;

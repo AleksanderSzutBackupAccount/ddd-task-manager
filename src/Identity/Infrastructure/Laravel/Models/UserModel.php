@@ -6,7 +6,6 @@ namespace Src\Identity\Infrastructure\Laravel\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use Src\Identity\Domain\User;
 use Src\Identity\Domain\ValueObjects\UserEmail;
 use Src\Identity\Domain\ValueObjects\UserExternalId;

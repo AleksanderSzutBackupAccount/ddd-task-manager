@@ -16,7 +16,7 @@ final readonly class JwtTokenGenerator implements TokenGeneratorInterface
     private Configuration $config;
 
     /**
-     * @param non-empty-string $secret
+     * @param  non-empty-string  $secret
      */
     public function __construct(string $secret)
     {

@@ -6,9 +6,7 @@ namespace Src\Identity\Application\UseCases\SyncUsers;
 
 final readonly class SyncUsersCommandHandler
 {
-    public function __construct(private  UserSynchronizer $synchronizer)
-    {
-    }
+    public function __construct(private UserSynchronizer $synchronizer) {}
 
     public function handle(SyncUsersCommand $command): void
     {

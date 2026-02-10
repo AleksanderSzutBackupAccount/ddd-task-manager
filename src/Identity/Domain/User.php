@@ -17,14 +17,12 @@ final class User extends AggregateRoot
         public readonly UserName $name,
         public readonly UserEmail $email,
         public readonly UserExternalId $externalId,
-    )
-    {
-    }
+    ) {}
 
     public static function import(
-          UserName $name,
-          UserEmail $email,
-          UserExternalId $externalId): self
+        UserName $name,
+        UserEmail $email,
+        UserExternalId $externalId): self
     {
         $entity = new self(UserId::generate(), $name, $email, $externalId);
 

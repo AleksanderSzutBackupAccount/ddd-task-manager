@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Identity\Domain;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Src\Identity\Domain\ValueObjects\UserEmail;
 use Src\Identity\Domain\ValueObjects\UserExternalId;
 use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Identity\Domain\ValueObjects\UserName;
-use InvalidArgumentException;
 
 final class ValueObjectsTest extends TestCase
 {
