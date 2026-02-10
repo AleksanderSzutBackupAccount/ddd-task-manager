@@ -29,7 +29,7 @@ final class UserLaravelRepository implements UserRepository
     public function find(UserId $id): ?User
     {
         /** @var UserModel|null $model */
-        $model = UserModel::query()->where('id', $id)->first();
+        $model = UserModel::query()->where('id', $id->value)->first();
 
         return $model?->toEntity();
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Identity\Infrastructure\Laravel;
+namespace Src\Identity\Infrastructure\Lcobucci;
 
 use DateTimeImmutable;
 use Lcobucci\JWT\Configuration;
@@ -13,33 +13,26 @@ use Src\Identity\Domain\User;
 
 final readonly class JwtTokenGenerator implements TokenGeneratorInterface
 {
-    private Configuration $config;
 
-    /**
-     * @param  non-empty-string  $secret
-     */
-    public function __construct(string $secret)
+    public function __construct(private LcobucciConfigProvider $configProvider)
     {
-        $this->config = Configuration::forSymmetricSigner(
-            new Sha256,
-            InMemory::plainText($secret)
-        );
     }
+
 
     public function generate(User $user): string
     {
         $now = new DateTimeImmutable;
 
-        return $this->config->builder()
+        return $this->configProvider->config->builder()
             ->issuedBy('coalition-backend')
             ->permittedFor('coalition-frontend')
             ->identifiedBy($user->id->value)
             ->issuedAt($now)
             ->canOnlyBeUsedAfter($now)
             ->expiresAt($now->modify('+1 hour'))
-            ->withClaim('uid', (string) $user->id)
-            ->withClaim('email', (string) $user->email)
-            ->getToken($this->config->signer(), $this->config->signingKey())
+            ->withClaim('uid', $user->id->value)
+            ->withClaim('email', $user->email->value)
+            ->getToken($this->configProvider->config->signer(), $this->configProvider->config->signingKey())
             ->toString();
     }
 }

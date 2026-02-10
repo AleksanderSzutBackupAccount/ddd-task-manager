@@ -32,7 +32,7 @@ abstract readonly class UuidValueObject implements ComparableInterface, Stringab
     public function validate(): void
     {
         if (! Uuid::isValid($this->value)) {
-            throw new InvalidArgumentException('Invalid UUID');
+            throw new InvalidArgumentException('Invalid UUID: ' . $this->value);
         }
     }
 

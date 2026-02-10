@@ -32,7 +32,7 @@ final readonly class ValueObjectCast implements CastsAttributes
             return null;
         }
 
-        return new $this->valueObjectClass($value);
+        return new $this->valueObjectClass((string) $value);
     }
 
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed

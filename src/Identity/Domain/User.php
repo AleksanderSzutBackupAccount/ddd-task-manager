@@ -24,7 +24,7 @@ final class User extends AggregateRoot
         UserEmail $email,
         UserExternalId $externalId): self
     {
-        $entity = new self(UserId::generate(), $name, $email, $externalId);
+        $entity = new self(new UserId(\Ramsey\Uuid\Uuid::uuid4()->toString()), $name, $email, $externalId);
 
         $entity->record(new UserImportedEvent($entity->id));
 
