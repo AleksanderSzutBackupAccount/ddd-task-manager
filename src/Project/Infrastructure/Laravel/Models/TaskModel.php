@@ -32,11 +32,17 @@ final class TaskModel extends CastableModel
         'updated_at' => 'immutable_datetime',
     ];
 
+    /**
+     * @return BelongsTo<ProjectModel, $this>
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(ProjectModel::class, 'project_id');
     }
 
+    /**
+     * @return BelongsTo<\Src\Identity\Infrastructure\Laravel\Models\UserModel, $this>
+     */
     public function assignedUser(): BelongsTo
     {
         return $this->belongsTo(UserModel::class, 'assigned_user_id');
@@ -44,16 +50,24 @@ final class TaskModel extends CastableModel
 
     public function toEntity(): Task
     {
+        /** @var TaskId $id */
+        $id = $this->id;
+        /** @var ProjectId $projectId */
+        $projectId = $this->project_id;
+        /** @var TaskStatus $status */
+        $status = $this->status;
+
         $task = Task::create(
-            id: $this->id,
-            projectId: $this->project_id,
+            id: $id,
+            projectId: $projectId,
             name: (string) $this->name,
             description: (string) $this->description,
-            status: $this->status,
+            status: $status,
             assignedUserId: $this->assigned_user_id
         );
         // pull events to clear since this is a rehydration shortcut
         $task->pullDomainEvents();
+
         return $task;
     }
 }

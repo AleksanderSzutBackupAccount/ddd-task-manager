@@ -9,6 +9,4 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
 /**
  * @implements QueryInterface<array>
  */
-final readonly class GetAllTasksQuery implements QueryInterface
-{
-}
+final readonly class GetAllTasksQuery implements QueryInterface {}

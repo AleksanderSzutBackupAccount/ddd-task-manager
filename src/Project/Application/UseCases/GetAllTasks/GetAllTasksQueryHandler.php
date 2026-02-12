@@ -9,12 +9,15 @@ use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
 /**
- * @implements QueryHandlerInterface<GetAllTasksQuery, array>
+ * @implements QueryHandlerInterface<GetAllTasksQuery, array<\Src\Project\Domain\Task>>
  */
 final readonly class GetAllTasksQueryHandler implements QueryHandlerInterface
 {
     public function __construct(private TaskRepository $tasks) {}
 
+    /**
+     * @return array<\Src\Project\Domain\Task>
+     */
     public function __invoke(QueryInterface $query): array
     {
         return $this->tasks->findAll();

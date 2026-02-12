@@ -20,7 +20,7 @@ final readonly class ChangeTaskStatusCommandHandler implements CommandHandlerInt
         /** @var ChangeTaskStatusCommand $command */
         $task = $this->tasks->findById(new TaskId($command->taskId));
         if ($task === null) {
-            throw new TaskNotFoundException();
+            throw new TaskNotFoundException;
         }
 
         $task->changeStatus(new TaskStatus($command->newStatus));

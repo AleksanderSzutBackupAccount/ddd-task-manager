@@ -12,6 +12,6 @@ final readonly class TaskStatusChanged implements DomainEvent
         public string $taskId,
         public string $oldStatus,
         public string $newStatus,
-        public \DateTimeImmutable $occurredOn = new \DateTimeImmutable()
+        public \DateTimeImmutable $occurredOn = new \DateTimeImmutable
     ) {}
 }

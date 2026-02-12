@@ -28,11 +28,11 @@ final readonly class CreateTaskCommandHandler implements CommandHandlerInterface
         /** @var CreateTaskCommand $command */
         $project = $this->projects->findBySlug(new ProjectSlug($command->projectSlug));
         if ($project === null) {
-            throw new ProjectNotFoundException();
+            throw new ProjectNotFoundException;
         }
 
         if ($command->assignedUserId !== null && ! $project->isUserAssigned($command->assignedUserId)) {
-            throw new UserNotInProjectException();
+            throw new UserNotInProjectException;
         }
 
         $uuid = Uuid::uuid4()->toString();

@@ -10,7 +10,9 @@ use Src\Shared\Domain\ValueObjects\StringValueObject;
 final readonly class TaskStatus extends StringValueObject
 {
     public const TO_DO = 'To Do';
+
     public const IN_PROGRESS = 'In Progress';
+
     public const DONE = 'Done';
 
     public const VALID_STATUSES = [
@@ -21,7 +23,7 @@ final readonly class TaskStatus extends StringValueObject
 
     protected function validate(): void
     {
-        if (!in_array($this->value, self::VALID_STATUSES, true)) {
+        if (! in_array($this->value, self::VALID_STATUSES, true)) {
             throw new InvalidArgumentException(sprintf('Invalid task status: %s', $this->value));
         }
     }

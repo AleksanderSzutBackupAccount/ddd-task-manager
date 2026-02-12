@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src\Project\Infrastructure\Laravel\Persistence;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Src\Project\Domain\Events\TaskCreated;
 use Src\Project\Domain\Events\TaskStatusChanged;
@@ -31,7 +30,7 @@ final class EventSourcedTaskRepository implements TaskRepository
             /** @var TaskModel|null $model */
             $model = TaskModel::query()->find((string) $task->id());
             if ($model === null) {
-                $model = new TaskModel();
+                $model = new TaskModel;
                 $model->id = (string) $task->id();
             }
             $model->project_id = (string) $task->projectId();
@@ -45,15 +44,16 @@ final class EventSourcedTaskRepository implements TaskRepository
 
     public function findById(TaskId $id): ?Task
     {
-        /** @var TaskEventModel[] $rows */
+        /** @var \Illuminate\Database\Eloquent\Collection<int, TaskEventModel> $rows */
         $rows = TaskEventModel::query()->where('task_id', (string) $id)->orderBy('occurred_on')->get();
         if ($rows->isEmpty()) {
             return null;
         }
         $events = [];
         foreach ($rows as $row) {
-            $occurred = $row->occurred_on instanceof \DateTimeImmutable ? $row->occurred_on : new \DateTimeImmutable((string) $row->occurred_on);
-            $events[] = $this->mapEvent($row->event_type, $row->payload, $occurred);
+            /** @var array<string, mixed> $payload */
+            $payload = $row->payload;
+            $events[] = $this->mapEvent($row->event_type, $payload, $row->occurred_on->toDateTimeImmutable());
         }
 
         return Task::reconstitute($events);
@@ -87,8 +87,8 @@ final class EventSourcedTaskRepository implements TaskRepository
             default => throw new \InvalidArgumentException('Unknown event '.get_class($event)),
         };
 
-        $payload = match ($type) {
-            'task.created' => [
+        $payload = match (true) {
+            $event instanceof TaskCreated => [
                 'taskId' => $event->taskId,
                 'projectId' => $event->projectId,
                 'name' => $event->name,
@@ -96,11 +96,12 @@ final class EventSourcedTaskRepository implements TaskRepository
                 'status' => $event->status,
                 'assignedUserId' => $event->assignedUserId,
             ],
-            'task.status_changed' => [
+            $event instanceof TaskStatusChanged => [
                 'taskId' => $event->taskId,
                 'oldStatus' => $event->oldStatus,
                 'newStatus' => $event->newStatus,
             ],
+            default => throw new \InvalidArgumentException('Unknown event type'),
         };
 
         TaskEventModel::query()->create([
@@ -108,26 +109,29 @@ final class EventSourcedTaskRepository implements TaskRepository
             'task_id' => $payload['taskId'],
             'event_type' => $type,
             'payload' => $payload,
-            'occurred_on' => $event->occurredOn ?? now(),
+            'occurred_on' => property_exists($event, 'occurredOn') ? $event->occurredOn : now(),
         ]);
     }
 
+    /**
+     * @param  array<string, mixed>  $payload
+     */
     private function mapEvent(string $type, array $payload, \DateTimeImmutable $occurredOn): object
     {
         return match ($type) {
             'task.created' => new TaskCreated(
-                $payload['taskId'],
-                $payload['projectId'],
-                $payload['name'],
-                $payload['description'],
-                $payload['status'],
-                $payload['assignedUserId'] ?? null,
+                (string) $payload['taskId'],
+                (string) $payload['projectId'],
+                (string) $payload['name'],
+                (string) $payload['description'],
+                (string) $payload['status'],
+                isset($payload['assignedUserId']) ? (string) $payload['assignedUserId'] : null,
                 $occurredOn
             ),
             'task.status_changed' => new TaskStatusChanged(
-                $payload['taskId'],
-                $payload['oldStatus'],
-                $payload['newStatus'],
+                (string) $payload['taskId'],
+                (string) $payload['oldStatus'],
+                (string) $payload['newStatus'],
                 $occurredOn
             ),
             default => throw new \InvalidArgumentException('Unknown type '.$type),

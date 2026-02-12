@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Project\Infrastructure\Laravel\Persistence;
 
-use Illuminate\Support\Str;
 use Src\Project\Domain\Project;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\ValueObjects\ProjectId;
@@ -16,7 +15,7 @@ final class EloquentProjectRepository implements ProjectRepository
     public function save(Project $project): void
     {
         /** @var ProjectModel $model */
-        $model = ProjectModel::query()->find((string) $project->id()) ?? new ProjectModel();
+        $model = ProjectModel::query()->find((string) $project->id()) ?? new ProjectModel;
         $model->id = (string) $project->id();
         $model->name = $project->name();
         $model->slug = (string) $project->slug();
@@ -30,6 +29,7 @@ final class EloquentProjectRepository implements ProjectRepository
     {
         /** @var ProjectModel|null $model */
         $model = ProjectModel::query()->find((string) $id);
+
         return $model?->toEntity();
     }
 
@@ -37,6 +37,7 @@ final class EloquentProjectRepository implements ProjectRepository
     {
         /** @var ProjectModel|null $model */
         $model = ProjectModel::query()->where('slug', (string) $slug)->first();
+
         return $model?->toEntity();
     }
 }

@@ -15,6 +15,6 @@ final readonly class TaskCreated implements DomainEvent
         public string $description,
         public string $status,
         public ?string $assignedUserId,
-        public \DateTimeImmutable $occurredOn = new \DateTimeImmutable()
+        public \DateTimeImmutable $occurredOn = new \DateTimeImmutable
     ) {}
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\Project\Infrastructure\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Src\Identity\Infrastructure\Laravel\Models\UserModel;
 use Src\Project\Domain\Project;
 use Src\Project\Domain\ValueObjects\ProjectId;
@@ -30,6 +31,9 @@ final class ProjectModel extends CastableModel
         'updated_at' => 'immutable_datetime',
     ];
 
+    /**
+     * @return BelongsToMany<UserModel, $this, Pivot, 'pivot'>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(UserModel::class, 'project_user', 'project_id', 'user_id');
@@ -39,10 +43,15 @@ final class ProjectModel extends CastableModel
     {
         $userIds = $this->users()->pluck('users.id')->map(fn ($id) => (string) $id)->all();
 
+        /** @var ProjectId $id */
+        $id = $this->id;
+        /** @var ProjectSlug $slug */
+        $slug = $this->slug;
+
         return new Project(
-            id: $this->id,
+            id: $id,
             name: (string) $this->name,
-            slug: $this->slug,
+            slug: $slug,
             userIds: $userIds,
         );
     }

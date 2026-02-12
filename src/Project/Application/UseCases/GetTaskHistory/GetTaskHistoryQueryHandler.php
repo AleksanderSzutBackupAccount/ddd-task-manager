@@ -9,10 +9,13 @@ use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
 /**
- * @implements QueryHandlerInterface<GetTaskHistoryQuery, array>
+ * @implements QueryHandlerInterface<GetTaskHistoryQuery, array<array{type: string, payload: array<string, mixed>, occurred_on: \DateTimeImmutable}>>
  */
 final readonly class GetTaskHistoryQueryHandler implements QueryHandlerInterface
 {
+    /**
+     * @return array<array{type: string, payload: array<string, mixed>, occurred_on: \DateTimeImmutable}>
+     */
     public function __invoke(QueryInterface $query): array
     {
         /** @var GetTaskHistoryQuery $query */
@@ -20,11 +23,16 @@ final readonly class GetTaskHistoryQueryHandler implements QueryHandlerInterface
             ->where('task_id', $query->taskId)
             ->orderBy('occurred_on')
             ->get()
-            ->map(fn (TaskEventModel $m) => [
-                'type' => $m->event_type,
-                'payload' => $m->payload,
-                'occurred_on' => $m->occurred_on,
-            ])
+            ->map(function (TaskEventModel $m) {
+                /** @var array<string, mixed> $payload */
+                $payload = $m->payload;
+
+                return [
+                    'type' => $m->event_type,
+                    'payload' => $payload,
+                    'occurred_on' => $m->occurred_on->toDateTimeImmutable(),
+                ];
+            })
             ->all();
     }
 }

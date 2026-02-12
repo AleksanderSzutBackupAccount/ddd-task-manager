@@ -15,10 +15,15 @@ use Src\Shared\Domain\Bus\DomainEvent;
 final class Task extends AggregateRoot
 {
     private TaskId $id;
+
     private ProjectId $projectId;
+
     private string $name;
+
     private string $description;
+
     private TaskStatus $status;
+
     private ?string $assignedUserId;
 
     public function __construct() {}
@@ -31,7 +36,7 @@ final class Task extends AggregateRoot
         TaskStatus $status,
         ?string $assignedUserId
     ): self {
-        $task = new self();
+        $task = new self;
         $task->recordAndApply(new TaskCreated(
             $id->value(),
             $projectId->value(),
@@ -46,7 +51,7 @@ final class Task extends AggregateRoot
 
     public function changeStatus(TaskStatus $newStatus): void
     {
-        if (!$this->status->equals($newStatus)) {
+        if (! $this->status->equals($newStatus)) {
             $this->recordAndApply(new TaskStatusChanged(
                 $this->id->value(),
                 $this->status->value(),
@@ -61,11 +66,15 @@ final class Task extends AggregateRoot
         $this->apply($event);
     }
 
-    public function apply(DomainEvent $event): void
+    public function apply(object $event): void
     {
         if ($event instanceof TaskCreated) {
-            $this->id = new TaskId($event->taskId);
-            $this->projectId = new ProjectId($event->projectId);
+            /** @var non-empty-string $taskId */
+            $taskId = $event->taskId;
+            /** @var non-empty-string $projectId */
+            $projectId = $event->projectId;
+            $this->id = new TaskId($taskId);
+            $this->projectId = new ProjectId($projectId);
             $this->name = $event->name;
             $this->description = $event->description;
             $this->status = new TaskStatus($event->status);
@@ -75,12 +84,16 @@ final class Task extends AggregateRoot
         }
     }
 
+    /**
+     * @param  array<int, object>  $events
+     */
     public static function reconstitute(array $events): self
     {
-        $task = new self();
+        $task = new self;
         foreach ($events as $event) {
             $task->apply($event);
         }
+
         return $task;
     }
 

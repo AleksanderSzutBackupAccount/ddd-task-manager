@@ -11,7 +11,7 @@ use Src\Shared\Domain\Aggregate\AggregateRoot;
 final class Project extends AggregateRoot
 {
     /**
-     * @param string[] $userIds
+     * @param  string[]  $userIds
      */
     public function __construct(
         private readonly ProjectId $id,
@@ -55,7 +55,7 @@ final class Project extends AggregateRoot
 
     public function assignUser(string $userId): void
     {
-        if (!$this->isUserAssigned($userId)) {
+        if (! $this->isUserAssigned($userId)) {
             $this->userIds[] = $userId;
         }
     }

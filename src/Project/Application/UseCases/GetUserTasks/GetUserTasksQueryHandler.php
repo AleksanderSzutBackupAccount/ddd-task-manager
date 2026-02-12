@@ -9,12 +9,15 @@ use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
 /**
- * @implements QueryHandlerInterface<GetUserTasksQuery, array>
+ * @implements QueryHandlerInterface<GetUserTasksQuery, array<\Src\Project\Domain\Task>>
  */
 final readonly class GetUserTasksQueryHandler implements QueryHandlerInterface
 {
     public function __construct(private TaskRepository $tasks) {}
 
+    /**
+     * @return array<\Src\Project\Domain\Task>
+     */
     public function __invoke(QueryInterface $query): array
     {
         /** @var GetUserTasksQuery $query */
