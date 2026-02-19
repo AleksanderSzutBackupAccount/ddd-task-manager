@@ -17,7 +17,7 @@ final class LoginControllerTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $response = $this->postJson('/auth/login', [
+        $response = $this->postJson('/api/auth/login', [
             'email' => 'test@example.com',
         ]);
 
@@ -31,7 +31,7 @@ final class LoginControllerTest extends TestCase
 
     public function test_login_returns_error_for_non_existent_user(): void
     {
-        $response = $this->postJson('/auth/login', [
+        $response = $this->postJson('/api/auth/login', [
             'email' => 'nonexistent@example.com',
         ]);
 
@@ -45,13 +45,13 @@ final class LoginControllerTest extends TestCase
     public function test_login_validation_errors(): void
     {
         // Missing email
-        $response = $this->postJson('/auth/login', []);
+        $response = $this->postJson('/api/auth/login', []);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['email']);
 
         // Invalid email format
-        $response = $this->postJson('/auth/login', [
+        $response = $this->postJson('/api/auth/login', [
             'email' => 'not-an-email',
         ]);
 

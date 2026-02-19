@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Src\Identity\Infrastructure\Laravel\Providers;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Src\Identity\Application\Ports\ExternalUserProvider;
 use Src\Identity\Application\UseCases\LoginByEmail\LoginByEmailQuery;
 use Src\Identity\Application\UseCases\LoginByEmail\LoginByEmailQueryHandler;
@@ -33,6 +35,11 @@ final class IdentityServiceProvider extends BaseContextServiceProvider
 
     public function register(): void
     {
+        $this->app->bind(ClientInterface::class, function () {
+            return new Client([
+                'timeout' => 10,
+            ]);
+        });
         parent::register();
     }
 }

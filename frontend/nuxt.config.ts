@@ -16,7 +16,15 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-01-15',
-
+  nitro: {
+    routeRules: {
+      '/api/**': {
+        proxy: {
+          to: 'http://localhost/api/**'
+        }
+      }
+    }
+  },
   eslint: {
     config: {
       stylistic: {

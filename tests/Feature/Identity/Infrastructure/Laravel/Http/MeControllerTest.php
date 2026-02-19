@@ -18,14 +18,14 @@ final class MeControllerTest extends TestCase
             'name' => 'Auth Test User',
         ]);
 
-        $loginResponse = $this->postJson('/auth/login', [
+        $loginResponse = $this->postJson('/api/auth/login', [
             'email' => 'auth-test@example.com',
         ]);
 
         $token = $loginResponse->json('token');
 
         $response = $this->withToken($token)
-            ->getJson('/auth/me');
+            ->getJson('/api/auth/me');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -37,7 +37,7 @@ final class MeControllerTest extends TestCase
 
     public function test_it_returns_unauthorized_when_no_token_provided(): void
     {
-        $response = $this->getJson('/auth/me');
+        $response = $this->getJson('/api/auth/me');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated']);
@@ -46,7 +46,7 @@ final class MeControllerTest extends TestCase
     public function test_it_returns_unauthorized_when_invalid_token_provided(): void
     {
         $response = $this->withToken('invalid-token')
-            ->getJson('/auth/me');
+            ->getJson('/api/auth/me');
 
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated']);
