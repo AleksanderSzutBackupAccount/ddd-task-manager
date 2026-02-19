@@ -11,9 +11,6 @@ use Stringable;
 
 abstract readonly class UuidValueObject implements ComparableInterface, Stringable, ValueObjectInterface
 {
-    /**
-     * @param  non-empty-string  $value
-     */
     final public function __construct(public string $value)
     {
         $this->validate();

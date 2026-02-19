@@ -9,7 +9,7 @@ use Src\Project\Domain\Exceptions\ProjectNotFoundException;
 use Src\Project\Domain\Exceptions\UserNotInProjectException;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\Task;
-use Src\Project\Domain\TaskRepository;
+use Src\Project\Domain\TaskWriteRepository;
 use Src\Project\Domain\ValueObjects\ProjectSlug;
 use Src\Project\Domain\ValueObjects\TaskId;
 use Src\Project\Domain\ValueObjects\TaskStatus;
@@ -20,7 +20,7 @@ final readonly class CreateTaskCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ProjectRepository $projects,
-        private TaskRepository $tasks
+        private TaskWriteRepository $tasks
     ) {}
 
     public function handle(CommandInterface $command): void

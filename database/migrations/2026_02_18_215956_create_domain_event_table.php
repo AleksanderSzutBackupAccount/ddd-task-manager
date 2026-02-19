@@ -11,19 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_events', static function (Blueprint $table): void {
+        Schema::create('domain_event', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('task_id');
-            $table->string('event_type');
+            $table->uuid('aggregate_id')->index();
+            $table->integer('version');
+            $table->string('name');
             $table->json('payload');
             $table->timestamp('occurred_on');
 
-            $table->index('task_id');
+            $table->unique(['aggregate_id', 'version']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('task_events');
+        Schema::dropIfExists('domain_event');
     }
 };

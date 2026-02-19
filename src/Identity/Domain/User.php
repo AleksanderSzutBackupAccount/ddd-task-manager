@@ -9,6 +9,7 @@ use Src\Identity\Domain\ValueObjects\UserExternalId;
 use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Identity\Domain\ValueObjects\UserName;
 use Src\Shared\Domain\Aggregate\AggregateRoot;
+use Src\Shared\Domain\Bus\DomainEvent;
 
 final class User extends AggregateRoot
 {
@@ -29,5 +30,10 @@ final class User extends AggregateRoot
         $entity->record(new UserImportedEvent($entity->id));
 
         return $entity;
+    }
+
+    public function apply(DomainEvent $domainEvent): void
+    {
+        // Brak event sourcingu dla User w tym momencie — zdarzenia nie modyfikują stanu agregatu
     }
 }

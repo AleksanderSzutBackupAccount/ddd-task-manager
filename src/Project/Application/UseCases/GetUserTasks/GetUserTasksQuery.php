@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Project\Application\UseCases\GetUserTasks;
 
+use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
 /**
@@ -11,5 +12,5 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
  */
 final readonly class GetUserTasksQuery implements QueryInterface
 {
-    public function __construct(public string $userId) {}
+    public function __construct(public UserId $userId) {}
 }

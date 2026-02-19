@@ -16,10 +16,13 @@ final readonly class JwtTokenGenerator implements TokenGeneratorInterface
     {
         $now = new DateTimeImmutable;
 
+        /** @var non-empty-string $id */
+        $id = $user->id->value;
+
         return $this->configProvider->config->builder()
             ->issuedBy(LcobucciConfigProvider::ISSUER)
             ->permittedFor(LcobucciConfigProvider::PERMITTED_FOR)
-            ->identifiedBy($user->id->value)
+            ->identifiedBy($id)
             ->issuedAt($now)
             ->canOnlyBeUsedAfter($now)
             ->expiresAt($now->modify(LcobucciConfigProvider::DEFAULT_TTL))

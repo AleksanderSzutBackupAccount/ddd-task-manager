@@ -12,6 +12,8 @@ use Src\Project\Application\UseCases\CreateProject\CreateProjectCommand;
 use Src\Project\Application\UseCases\CreateTask\CreateTaskCommand;
 use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQuery;
 use Src\Project\Domain\ProjectRepository;
+use Src\Project\Domain\ValueObjects\ProjectSlug;
+use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Project\Infrastructure\Laravel\Models\TaskModel;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
 use Src\Shared\Application\Bus\Query\QueryBusInterface;
@@ -30,12 +32,14 @@ final class ProjectTasksFlowTest extends TestCase
         // and a project with slug ABCD
         /** @var CommandHandlerInterface $commandBus */
         $commandBus = $this->app->make(CommandHandlerInterface::class);
+        $queryBus = $this->app->make(QueryBusInterface::class);
+
         $commandBus->handle(new CreateProjectCommand(name: 'Alpha', slug: 'ABCD'));
 
         // assign user to project (via repo to keep test minimal)
         /** @var ProjectRepository $projects */
         $projects = $this->app->make(ProjectRepository::class);
-        $project = $projects->findBySlug(new \Src\Project\Domain\ValueObjects\ProjectSlug('ABCD'));
+        $project = $projects->findBySlug(new ProjectSlug('ABCD'));
         $this->assertNotNull($project);
         $project->assignUser((string) $user->id);
         $projects->save($project);
@@ -57,12 +61,9 @@ final class ProjectTasksFlowTest extends TestCase
         // and when changing status to Done
         $commandBus->handle(new ChangeTaskStatusCommand(
             taskId: (string) $taskModel->id,
-            newStatus: \Src\Project\Domain\ValueObjects\TaskStatus::DONE
+            newStatus: TaskStatus::DONE
         ));
 
-        // history should contain both created and status_changed events
-        /** @var QueryBusInterface $queryBus */
-        $queryBus = $this->app->make(QueryBusInterface::class);
         $history = $queryBus->ask(new GetTaskHistoryQuery((string) $taskModel->id));
 
         $this->assertNotEmpty($history);

@@ -7,6 +7,7 @@ namespace Src\Project\Domain;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Project\Domain\ValueObjects\ProjectSlug;
 use Src\Shared\Domain\Aggregate\AggregateRoot;
+use Src\Shared\Domain\Bus\DomainEvent;
 
 final class Project extends AggregateRoot
 {
@@ -19,6 +20,11 @@ final class Project extends AggregateRoot
         private readonly ProjectSlug $slug,
         private array $userIds = []
     ) {}
+
+    public function apply(DomainEvent $domainEvent): void
+    {
+        // No events implemented for Project yet
+    }
 
     public static function create(ProjectId $id, string $name, ProjectSlug $slug): self
     {

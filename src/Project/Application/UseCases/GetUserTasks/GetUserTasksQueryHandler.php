@@ -15,9 +15,6 @@ final readonly class GetUserTasksQueryHandler implements QueryHandlerInterface
 {
     public function __construct(private TaskRepository $tasks) {}
 
-    /**
-     * @return array<\Src\Project\Domain\Task>
-     */
     public function __invoke(QueryInterface $query): array
     {
         /** @var GetUserTasksQuery $query */
