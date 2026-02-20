@@ -11,5 +11,7 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
  */
 final readonly class GetTaskHistoryQuery implements QueryInterface
 {
-    public function __construct(public string $taskId) {}
+    public function __construct(public string $taskId)
+    {
+    }
 }

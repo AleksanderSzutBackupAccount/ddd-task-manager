@@ -6,16 +6,17 @@ namespace Src\Identity\Application\UseCases\GetUsers;
 
 use Src\Identity\Domain\UserRepository;
 use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
-use Src\Shared\Application\Bus\Query\QueryInterface;
 
 /**
  * @implements QueryHandlerInterface<GetUsersQuery, UserResponse>
  */
 final readonly class GetUsersQueryHandler implements QueryHandlerInterface
 {
-    public function __construct(private UserRepository $repository) {}
+    public function __construct(private UserRepository $repository)
+    {
+    }
 
-    public function __invoke(QueryInterface $query): UserResponse
+    public function __invoke(GetUsersQuery $query): UserResponse
     {
         $users = $this->repository->all();
 

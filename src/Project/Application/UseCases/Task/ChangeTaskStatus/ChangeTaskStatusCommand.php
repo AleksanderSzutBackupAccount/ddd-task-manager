@@ -10,6 +10,7 @@ final readonly class ChangeTaskStatusCommand implements CommandInterface
 {
     public function __construct(
         public string $taskId,
-        public string $newStatus
-    ) {}
+        public string $newStatus,
+    ) {
+    }
 }

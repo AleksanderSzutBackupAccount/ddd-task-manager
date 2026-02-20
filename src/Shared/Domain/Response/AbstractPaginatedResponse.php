@@ -12,13 +12,14 @@ use Src\Shared\Domain\Response\Filters\FilterDefinitionList;
 abstract readonly class AbstractPaginatedResponse
 {
     /**
-     * @param  ItemType[]  $data
+     * @param ItemType[] $data
      */
     public function __construct(
         public MetaResponse $meta,
         public array $data,
         public FilterDefinitionList $filters,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<string, mixed>

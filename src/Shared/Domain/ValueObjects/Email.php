@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\ValueObjects;
 
-use InvalidArgumentException;
 use Src\Shared\Domain\Exceptions\InvalidValueObjectException;
 
 readonly class Email extends NotEmptyString
@@ -19,8 +18,8 @@ readonly class Email extends NotEmptyString
 
     protected function validate(): void
     {
-        if (! filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException('Invalid email address '.$this->value);
+        if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException('Invalid email address '.$this->value);
         }
     }
 }

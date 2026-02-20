@@ -12,6 +12,7 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
 final readonly class LoginByEmailQuery implements QueryInterface
 {
     public function __construct(
-        public string $email
-    ) {}
+        public string $email,
+    ) {
+    }
 }

@@ -13,16 +13,19 @@ use Src\Shared\Domain\Bus\DomainEvent;
 final class Project extends AggregateRoot
 {
     /**
-     * @param  string[]  $userIds
+     * @param string[] $userIds
      */
     public function __construct(
         private readonly ProjectId $id,
         private string $name,
         private readonly ProjectSlug $slug,
-        private array $userIds = []
-    ) {}
+        private array $userIds = [],
+    ) {
+    }
 
-    public function apply(DomainEvent $domainEvent): void {}
+    public function apply(DomainEvent $domainEvent): void
+    {
+    }
 
     public static function create(ProjectId $id, string $name, ProjectSlug $slug): self
     {
@@ -59,7 +62,7 @@ final class Project extends AggregateRoot
 
     public function assignUser(UserId $userId): void
     {
-        if (! $this->isUserAssigned($userId)) {
+        if (!$this->isUserAssigned($userId)) {
             $this->userIds[] = $userId->value;
         }
     }

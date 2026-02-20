@@ -7,7 +7,6 @@ namespace Src\Project\Application\UseCases\Task\GetTaskHistory;
 use Src\Project\Domain\TaskReadRepository;
 use Src\Project\Domain\ValueObjects\TaskId;
 use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
-use Src\Shared\Application\Bus\Query\QueryInterface;
 use Src\Shared\Domain\Bus\DomainEventStored;
 
 /**
@@ -15,14 +14,15 @@ use Src\Shared\Domain\Bus\DomainEventStored;
  */
 final readonly class GetTaskHistoryQueryHandler implements QueryHandlerInterface
 {
-    public function __construct(private TaskReadRepository $tasks) {}
+    public function __construct(private TaskReadRepository $tasks)
+    {
+    }
 
     /**
      * @return array<array{type: string, payload: array<string, mixed>, occurred_on: \DateTimeImmutable, version: int}>
      */
-    public function __invoke(QueryInterface $query): array
+    public function __invoke(GetTaskHistoryQuery $query): array
     {
-        /** @var GetTaskHistoryQuery $query */
         $events = $this->tasks->getHistory(new TaskId($query->taskId));
 
         return array_map(static function (DomainEventStored $event): array {

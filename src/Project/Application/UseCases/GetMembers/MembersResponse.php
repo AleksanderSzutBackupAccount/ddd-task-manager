@@ -9,7 +9,9 @@ use Src\Project\Domain\Member;
 
 final readonly class MembersResponse
 {
-    public function __construct(private MemberCollection $members) {}
+    public function __construct(private MemberCollection $members)
+    {
+    }
 
     /**
      * @return array<mixed>[]

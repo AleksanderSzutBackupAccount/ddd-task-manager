@@ -10,9 +10,4 @@ namespace Src\Shared\Application\Bus\Query;
  */
 interface QueryHandlerInterface
 {
-    /**
-     * @param  Q  $query
-     * @return R
-     */
-    public function __invoke(QueryInterface $query): mixed;
 }

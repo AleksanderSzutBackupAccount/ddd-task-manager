@@ -9,7 +9,7 @@ use Src\Shared\Domain\Bus\DomainEventStored;
 interface EventStore
 {
     /**
-     * @param  DomainEventStored[]  $events
+     * @param DomainEventStored[] $events
      */
     public function append(array $events): void;
 

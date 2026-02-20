@@ -14,5 +14,6 @@ final readonly class ExternalUser
         public string $username,
         public string $email,
         public string $name,
-    ) {}
+    ) {
+    }
 }

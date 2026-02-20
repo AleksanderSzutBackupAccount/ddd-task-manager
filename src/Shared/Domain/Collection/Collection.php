@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\Collection;
 
-use ArrayIterator;
-use Countable;
-use IteratorAggregate;
 use Src\Shared\Domain\Assert;
 use Src\Shared\Domain\ComparableCollectionInterface;
 use Src\Shared\Domain\ComparableInterface;
@@ -14,9 +11,9 @@ use Src\Shared\Domain\ComparableInterface;
 /**
  * @template T as object
  *
- * @implements IteratorAggregate<int, T>
+ * @implements \IteratorAggregate<int, T>
  */
-abstract class Collection implements Countable, IteratorAggregate
+abstract class Collection implements \Countable, \IteratorAggregate
 {
     /**
      * @var T[]
@@ -24,7 +21,7 @@ abstract class Collection implements Countable, IteratorAggregate
     private array $items;
 
     /**
-     * @param  T[]  $items
+     * @param T[] $items
      */
     final public function __construct(array $items)
     {
@@ -33,11 +30,11 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @return ArrayIterator<int, T>
+     * @return \ArrayIterator<int, T>
      */
-    final public function getIterator(): ArrayIterator
+    final public function getIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->items());
+        return new \ArrayIterator($this->items());
     }
 
     /**
@@ -49,7 +46,7 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  T  ...$items
+     * @param T ...$items
      */
     final public static function new(...$items): static
     {
@@ -80,7 +77,8 @@ abstract class Collection implements Countable, IteratorAggregate
     /**
      * @template R as mixed
      *
-     * @param  callable(T): R  $closure
+     * @param callable(T): R $closure
+     *
      * @return R[]
      */
     final public function map(callable $closure): array
@@ -89,7 +87,7 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  callable(T): T  $closure
+     * @param callable(T): T $closure
      */
     final public function mapSelf(callable $closure): static
     {
@@ -100,7 +98,7 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  callable(T):bool  $closure
+     * @param callable(T):bool $closure
      */
     final public function filter(callable $closure): static
     {
@@ -108,7 +106,7 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  null|callable(T, T):bool  $comparator
+     * @param callable(T, T):bool|null $comparator
      */
     public function unique(?callable $comparator = null): static
     {
@@ -116,7 +114,7 @@ abstract class Collection implements Countable, IteratorAggregate
 
         foreach ($this as $item) {
             $find = $items->contains($item, $comparator);
-            if (! $find) {
+            if (!$find) {
                 $items->push($item);
             }
         }
@@ -125,8 +123,8 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  T  $item
-     * @param  null|callable(T, T):bool  $comparator
+     * @param T                        $item
+     * @param callable(T, T):bool|null $comparator
      */
     final public function contains(object $item, ?callable $comparator = null): bool
     {
@@ -134,7 +132,8 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  callable(T, int):bool  $closure
+     * @param callable(T, int):bool $closure
+     *
      * @return ?T
      */
     final public function find(callable $closure): ?object
@@ -154,7 +153,7 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  callable(T, int): bool  $callable
+     * @param callable(T, int): bool $callable
      */
     final public function some(callable $callable): bool
     {
@@ -168,12 +167,12 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  callable(T, int): bool  $callable
+     * @param callable(T, int): bool $callable
      */
     final public function every(callable $callable): bool
     {
         foreach ($this->items as $index => $item) {
-            if (! $callable($item, $index)) {
+            if (!$callable($item, $index)) {
                 return false;
             }
         }
@@ -182,11 +181,11 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  ?T  $item
+     * @param ?T $item
      */
     final public function push(mixed $item): void
     {
-        if ($item === null) {
+        if (null === $item) {
             return;
         }
         Assert::instanceOf($this->type(), $item);
@@ -194,7 +193,7 @@ abstract class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param  static  $collection
+     * @param static $collection
      */
     final public function merge(self $collection): static
     {
@@ -209,11 +208,11 @@ abstract class Collection implements Countable, IteratorAggregate
 
     public function isEmpty(): bool
     {
-        return $this->count() === 0;
+        return 0 === $this->count();
     }
 
     /**
-     * @param  Collection<T>  $collection
+     * @param Collection<T> $collection
      */
     final public function isEqual(self $collection): bool
     {
@@ -222,14 +221,14 @@ abstract class Collection implements Countable, IteratorAggregate
         }
 
         return $this->every(
-            fn (object $item) => $collection->find(
+            fn (object $item) => null !== $collection->find(
                 fn (object $currentItem) => $item == $currentItem
-            ) !== null
+            )
         );
     }
 
     /**
-     * @param  Collection<T>  $collection
+     * @param Collection<T> $collection
      */
     final public function isEqualWithOrder(self $collection): bool
     {
@@ -246,9 +245,9 @@ abstract class Collection implements Countable, IteratorAggregate
     abstract protected function type(): string;
 
     /**
-     * @param  T  $item
-     * @param  T  $item2
-     * @param  null|callable(T, T):bool  $closure
+     * @param T                        $item
+     * @param T                        $item2
+     * @param callable(T, T):bool|null $closure
      */
     private function comparator(object $item, object $item2, ?callable $closure = null): bool
     {
@@ -261,7 +260,7 @@ abstract class Collection implements Countable, IteratorAggregate
         }
 
         if (is_subclass_of($this->type(), ComparableInterface::class)) {
-            /**
+            /*
              * @var ComparableInterface&T $item
              * @var ComparableInterface&T $item2
              */

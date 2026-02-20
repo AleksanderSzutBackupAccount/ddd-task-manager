@@ -1,0 +1,4 @@
+# config/routes/project.yaml
+project_controllers:
+    resource: '../../src/Project/Infrastructure/Symfony/Http/Controllers/'
+    type: attribute

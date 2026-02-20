@@ -7,7 +7,7 @@ namespace Src\Shared\Application\Auth;
 interface TokenParserInterface
 {
     /**
-     * @param  non-empty-string  $token
+     * @param non-empty-string $token
      */
     public function parse(string $token): ?TokenPayload;
 }

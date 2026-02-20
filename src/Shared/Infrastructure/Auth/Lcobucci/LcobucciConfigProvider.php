@@ -29,12 +29,12 @@ final readonly class LcobucciConfigProvider
             $secret = (string) base64_decode(substr($secret, 7));
         }
 
-        if ($secret === '') {
+        if ('' === $secret) {
             throw new InvalidConfigurationException('App key cannot be empty');
         }
 
         $this->config = Configuration::forSymmetricSigner(
-            new Sha256,
+            new Sha256(),
             InMemory::plainText($secret)
         );
     }

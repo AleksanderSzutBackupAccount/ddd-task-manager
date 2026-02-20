@@ -6,4 +6,6 @@ namespace Src\Shared\Domain;
 
 use Src\Shared\Domain\ValueObjects\UuidValueObject;
 
-readonly class ProductId extends UuidValueObject {}
+readonly class ProductId extends UuidValueObject
+{
+}

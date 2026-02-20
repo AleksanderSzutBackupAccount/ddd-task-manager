@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Src\Shared\Infrastructure\Auth\Lcobucci;
 
-use DateTimeImmutable;
 use Src\Shared\Application\Auth\TokenGeneratorInterface;
 
 final readonly class JwtTokenGenerator implements TokenGeneratorInterface
 {
-    public function __construct(private LcobucciConfigProvider $configProvider) {}
+    public function __construct(private LcobucciConfigProvider $configProvider)
+    {
+    }
 
     /**
-     * @param  non-empty-string  $subject
-     * @param  array<non-empty-string, non-empty-string>  $claims
-     * @param  non-empty-string|null  $ttl
+     * @param non-empty-string                          $subject
+     * @param array<non-empty-string, non-empty-string> $claims
+     * @param non-empty-string|null                     $ttl
      */
     public function generate(string $subject, array $claims = [], ?string $ttl = null): string
     {
-        $now = new DateTimeImmutable;
+        $now = new \DateTimeImmutable();
         $ttl = $ttl ?? LcobucciConfigProvider::DEFAULT_TTL;
 
         $builder = $this->configProvider->config->builder()

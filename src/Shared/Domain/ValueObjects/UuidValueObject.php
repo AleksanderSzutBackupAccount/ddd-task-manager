@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\ValueObjects;
 
-use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Src\Shared\Domain\ComparableInterface;
-use Stringable;
 
-abstract readonly class UuidValueObject implements ComparableInterface, Stringable, ValueObjectInterface
+abstract readonly class UuidValueObject implements ComparableInterface, \Stringable, ValueObjectInterface
 {
     final public function __construct(public string $value)
     {
@@ -28,14 +26,14 @@ abstract readonly class UuidValueObject implements ComparableInterface, Stringab
 
     public function validate(): void
     {
-        if (! Uuid::isValid($this->value)) {
-            throw new InvalidArgumentException('Invalid UUID: '.$this->value);
+        if (!Uuid::isValid($this->value)) {
+            throw new \InvalidArgumentException('Invalid UUID: '.$this->value);
         }
     }
 
     public static function fromNullable(?string $value): ?static
     {
-        if (! $value) {
+        if (!$value) {
             return null;
         }
 
@@ -48,7 +46,7 @@ abstract readonly class UuidValueObject implements ComparableInterface, Stringab
     }
 
     /**
-     * @param  self  $compare
+     * @param self $compare
      */
     public function equals(ComparableInterface $compare): bool
     {

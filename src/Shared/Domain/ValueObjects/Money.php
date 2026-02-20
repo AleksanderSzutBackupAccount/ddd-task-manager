@@ -6,5 +6,7 @@ namespace Src\Shared\Domain\ValueObjects;
 
 final readonly class Money
 {
-    public function __construct(public int $amount) {}
+    public function __construct(public int $amount)
+    {
+    }
 }

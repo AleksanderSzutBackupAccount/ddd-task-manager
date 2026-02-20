@@ -10,14 +10,14 @@ use Src\Shared\Domain\Bus\DomainEventStored;
 abstract class AggregateRoot
 {
     /**
-     * @var DomainEvent[]
+     * @var DomainEventStored[]
      */
     private array $domainEvents = [];
 
     private int $version = 0;
 
     /**
-     * @return DomainEvent[]
+     * @return DomainEventStored[]
      */
     final public function pullDomainEvents(): array
     {
@@ -27,14 +27,14 @@ abstract class AggregateRoot
         return $domainEvents;
     }
 
-    final protected function record(DomainEvent $domainEvent): void
+    final protected function record(DomainEventStored $domainEvent): void
     {
         $this->domainEvents[] = $domainEvent;
     }
 
     final protected function recordAndApply(DomainEventStored $domainEvent): void
     {
-        $this->version++;
+        ++$this->version;
         $eventWithVersion = $this->enrichEventWithVersion($domainEvent, $this->version);
         $this->record($eventWithVersion);
         $this->apply($eventWithVersion);
@@ -57,7 +57,7 @@ abstract class AggregateRoot
         $reflection = new \ReflectionClass($event);
         $constructor = $reflection->getConstructor();
 
-        if ($constructor === null) {
+        if (null === $constructor) {
             return $event;
         }
 
@@ -66,13 +66,13 @@ abstract class AggregateRoot
 
         foreach ($params as $param) {
             $name = $param->getName();
-            if ($name === 'version') {
+            if ('version' === $name) {
                 $args[] = $version;
-            } elseif ($name === 'id' || $name === 'aggregateId' || $name === 'taskId') {
+            } elseif ('id' === $name || 'aggregateId' === $name || 'taskId' === $name) {
                 $args[] = $event->aggregateId();
-            } elseif ($name === 'eventId') {
+            } elseif ('eventId' === $name) {
                 $args[] = $event->eventId();
-            } elseif ($name === 'occurredOn') {
+            } elseif ('occurredOn' === $name) {
                 $args[] = $event->occurredOn();
             } elseif ($reflection->hasProperty($name)) {
                 $property = $reflection->getProperty($name);

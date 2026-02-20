@@ -11,8 +11,9 @@ final readonly class MetaResponse
         public ?string $previousCursor,
         public int $perPage,
         public int $count,
-        public int $total
-    ) {}
+        public int $total,
+    ) {
+    }
 
     /**
      * @return mixed[]

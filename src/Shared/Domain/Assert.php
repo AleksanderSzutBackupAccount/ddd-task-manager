@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain;
 
-use InvalidArgumentException;
-
 final class Assert
 {
     /**
-     * @param  array<object>  $items
+     * @param array<object> $items
      */
     public static function arrayOf(string $class, array $items): void
     {
@@ -20,8 +18,8 @@ final class Assert
 
     public static function instanceOf(string $class, object $item): void
     {
-        if (! $item instanceof $class) {
-            throw new InvalidArgumentException(sprintf('The object <%s> is not an instance of <%s>', $class, get_class($item)));
+        if (!$item instanceof $class) {
+            throw new \InvalidArgumentException(sprintf('The object <%s> is not an instance of <%s>', $class, get_class($item)));
         }
     }
 }

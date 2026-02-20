@@ -9,7 +9,9 @@ use Src\Project\Domain\Project;
 
 final readonly class ProjectsResponse
 {
-    public function __construct(private ProjectCollection $projects) {}
+    public function __construct(private ProjectCollection $projects)
+    {
+    }
 
     /**
      * @return array<mixed>[]

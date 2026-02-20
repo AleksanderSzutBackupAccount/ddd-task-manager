@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     routeRules: {
       '/backend/**': {
         proxy: {
-          to: 'http://localhost/api/**'
+          to: 'http://localhost:8081/api/**'
         }
       }
     }

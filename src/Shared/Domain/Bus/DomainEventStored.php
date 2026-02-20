@@ -4,34 +4,33 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\Bus;
 
-use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 
 abstract readonly class DomainEventStored implements DomainEvent
 {
     private string $eventId;
 
-    private DateTimeImmutable $occurredOn;
+    private \DateTimeImmutable $occurredOn;
 
     public function __construct(
         private string $aggregateId,
         ?string $eventId = null,
-        ?DateTimeImmutable $occurredOn = null,
-        private int $version = 0
+        ?\DateTimeImmutable $occurredOn = null,
+        private int $version = 0,
     ) {
         $this->eventId = $eventId ?: Uuid::uuid4()->toString();
-        $this->occurredOn = $occurredOn ?: new DateTimeImmutable;
+        $this->occurredOn = $occurredOn ?: new \DateTimeImmutable();
     }
 
     /**
-     * @param  array<string, mixed>  $body
+     * @param array<string, mixed> $body
      */
     abstract public static function fromPrimitives(
         string $aggregateId,
         array $body,
         string $eventId,
-        DateTimeImmutable $occurredOn,
-        int $version = 0
+        \DateTimeImmutable $occurredOn,
+        int $version = 0,
     ): self;
 
     abstract public static function eventName(): string;
@@ -51,7 +50,7 @@ abstract readonly class DomainEventStored implements DomainEvent
         return $this->eventId;
     }
 
-    final public function occurredOn(): DateTimeImmutable
+    final public function occurredOn(): \DateTimeImmutable
     {
         return $this->occurredOn;
     }

@@ -7,4 +7,6 @@ namespace Src\Shared\Application\Bus\Query;
 /**
  * @template-covariant TResponse
  */
-interface QueryInterface {}
+interface QueryInterface
+{
+}

@@ -7,11 +7,12 @@ namespace Src\Shared\Domain\Response\Filters;
 readonly class SelectManyFilterDefinition implements FilterDefinition
 {
     /**
-     * @param  mixed[]  $values
+     * @param mixed[] $values
      */
     public function __construct(
         private array $values,
-    ) {}
+    ) {
+    }
 
     public function toResponse(): array
     {
