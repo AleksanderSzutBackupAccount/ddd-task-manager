@@ -4,11 +4,12 @@ namespace Tests\Feature\Identity\Infrastructure\Laravel\Http;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Src\Identity\Infrastructure\Laravel\Models\UserModel;
+use Tests\Helpers\AuthTestTrait;
 use Tests\TestCase;
 
 final class MeControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use AuthTestTrait, RefreshDatabase;
 
     public function test_it_returns_logged_in_user_info(): void
     {
@@ -17,14 +18,7 @@ final class MeControllerTest extends TestCase
             'email' => 'auth-test@example.com',
             'name' => 'Auth Test User',
         ]);
-
-        $loginResponse = $this->postJson('/api/auth/login', [
-            'email' => 'auth-test@example.com',
-        ]);
-
-        $token = $loginResponse->json('token');
-
-        $response = $this->withToken($token)
+        $response = $this->callAsAuthorized($user->id)
             ->getJson('/api/auth/me');
 
         $response->assertStatus(200)

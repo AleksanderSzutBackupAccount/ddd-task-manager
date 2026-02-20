@@ -11,15 +11,17 @@ use Src\Project\Application\UseCases\CreateProject\CreateProjectCommand;
 use Src\Project\Application\UseCases\CreateProject\CreateProjectCommandHandler;
 use Src\Project\Application\UseCases\CreateTask\CreateTaskCommand;
 use Src\Project\Application\UseCases\CreateTask\CreateTaskCommandHandler;
-use Src\Project\Application\UseCases\GetAllTasks\GetAllTasksQuery;
-use Src\Project\Application\UseCases\GetAllTasks\GetAllTasksQueryHandler;
+use Src\Project\Application\UseCases\GetProjects\GetProjectsQuery;
+use Src\Project\Application\UseCases\GetProjects\GetProjectsQueryHandler;
 use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQuery;
 use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQueryHandler;
 use Src\Project\Application\UseCases\GetUserTasks\GetUserTasksQuery;
 use Src\Project\Application\UseCases\GetUserTasks\GetUserTasksQueryHandler;
+use Src\Project\Domain\MemberRepository;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\TaskReadRepository;
 use Src\Project\Domain\TaskWriteRepository;
+use Src\Project\Infrastructure\Laravel\Persistence\EloquentMemberRepository;
 use Src\Project\Infrastructure\Laravel\Persistence\EloquentProjectRepository;
 use Src\Project\Infrastructure\Laravel\Persistence\EloquentTaskReadRepository;
 use Src\Project\Infrastructure\Laravel\Persistence\EventSourcedTaskWriteRepository;
@@ -36,6 +38,7 @@ final class ProjectServiceProvider extends BaseContextServiceProvider
         TaskWriteRepository::class => EventSourcedTaskWriteRepository::class,
         EventStore::class => EloquentEventStore::class,
         EventProjector::class => TaskProjector::class,
+        MemberRepository::class => EloquentMemberRepository::class,
     ];
 
     protected array $useCases = [
@@ -43,7 +46,7 @@ final class ProjectServiceProvider extends BaseContextServiceProvider
         CreateTaskCommand::class => CreateTaskCommandHandler::class,
         ChangeTaskStatusCommand::class => ChangeTaskStatusCommandHandler::class,
         GetUserTasksQuery::class => GetUserTasksQueryHandler::class,
-        GetAllTasksQuery::class => GetAllTasksQueryHandler::class,
+        GetProjectsQuery::class => GetProjectsQueryHandler::class,
         GetTaskHistoryQuery::class => GetTaskHistoryQueryHandler::class,
     ];
 }

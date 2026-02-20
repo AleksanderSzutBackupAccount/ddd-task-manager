@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Project\Domain;
 
+use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Project\Domain\ValueObjects\ProjectSlug;
 use Src\Shared\Domain\Aggregate\AggregateRoot;
@@ -21,10 +22,7 @@ final class Project extends AggregateRoot
         private array $userIds = []
     ) {}
 
-    public function apply(DomainEvent $domainEvent): void
-    {
-        // No events implemented for Project yet
-    }
+    public function apply(DomainEvent $domainEvent): void {}
 
     public static function create(ProjectId $id, string $name, ProjectSlug $slug): self
     {
@@ -54,15 +52,15 @@ final class Project extends AggregateRoot
         return $this->userIds;
     }
 
-    public function isUserAssigned(string $userId): bool
+    public function isUserAssigned(UserId $userId): bool
     {
-        return in_array($userId, $this->userIds, true);
+        return in_array($userId->value, $this->userIds, true);
     }
 
-    public function assignUser(string $userId): void
+    public function assignUser(UserId $userId): void
     {
         if (! $this->isUserAssigned($userId)) {
-            $this->userIds[] = $userId;
+            $this->userIds[] = $userId->value;
         }
     }
 }

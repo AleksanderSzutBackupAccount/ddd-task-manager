@@ -26,23 +26,21 @@ final class TaskProjector implements EventProjector
 
     private function projectTaskCreated(TaskCreated $event): void
     {
-        $model = new TaskModel;
-        $model->id = $event->aggregateId();
-        $model->project_id = $event->projectId;
-        $model->name = $event->name;
-        $model->description = $event->description;
-        $model->status = $event->status;
-        $model->assigned_user_id = $event->assignedUserId;
-        $model->save();
+        TaskModel::query()->create(
+            ['id' => $event->aggregateId(),
+                'project_id' => $event->projectId,
+                'name' => $event->name,
+                'description' => $event->description,
+                'status' => $event->status,
+                'assigned_user_id' => $event->assignedUserId,
+            ]
+        );
     }
 
     private function projectTaskStatusChanged(TaskStatusChanged $event): void
     {
-        /** @var TaskModel|null $model */
-        $model = TaskModel::query()->find($event->aggregateId());
-        if ($model) {
-            $model->status = $event->newStatus;
-            $model->save();
-        }
+        TaskModel::query()->where('id', $event->aggregateId())->update([
+            'status' => $event->newStatus,
+        ]);
     }
 }

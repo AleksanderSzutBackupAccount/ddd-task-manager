@@ -19,6 +19,8 @@ final readonly class CreateProjectCommandHandler implements CommandHandlerInterf
     {
         /** @var CreateProjectCommand $command */
         $project = Project::create(ProjectId::generate(), $command->name, new ProjectSlug($command->slug));
+
+        $project->assignUser($command->userId);
         $this->projects->save($project);
     }
 }

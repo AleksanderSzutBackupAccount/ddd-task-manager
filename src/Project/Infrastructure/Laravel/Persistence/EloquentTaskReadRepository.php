@@ -31,7 +31,7 @@ final readonly class EloquentTaskReadRepository implements TaskReadRepository
 
     public function findByUserId(UserId $userId): array
     {
-        // only tasks from projects where user is a member and assigned to the user
+        // only tasks from project where user is a member and assigned to the user
         $projectIds = ProjectModel::query()
             ->whereHas('users', fn ($q) => $q->where('users.id', $userId->value()))
             ->pluck('id');

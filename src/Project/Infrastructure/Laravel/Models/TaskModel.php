@@ -5,13 +5,21 @@ declare(strict_types=1);
 namespace Src\Project\Infrastructure\Laravel\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Src\Identity\Infrastructure\Laravel\Models\UserModel;
+use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Project\Domain\Task;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Project\Domain\ValueObjects\TaskId;
 use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Shared\Infrastructure\Laravel\CastableModel;
 
+/**
+ * @property TaskId $id
+ * @property ProjectId $project_id
+ * @property string $name
+ * @property string $description
+ * @property TaskStatus $status
+ * @property string|null $assigned_user_id
+ */
 final class TaskModel extends CastableModel
 {
     protected $table = 'tasks';
@@ -41,31 +49,23 @@ final class TaskModel extends CastableModel
     }
 
     /**
-     * @return BelongsTo<\Src\Identity\Infrastructure\Laravel\Models\UserModel, $this>
+     * @return BelongsTo<MemberModel, $this>
      */
     public function assignedUser(): BelongsTo
     {
-        return $this->belongsTo(UserModel::class, 'assigned_user_id');
+        return $this->belongsTo(MemberModel::class, 'assigned_user_id');
     }
 
     public function toEntity(): Task
     {
-        /** @var TaskId $id */
-        $id = $this->id;
-        /** @var ProjectId $projectId */
-        $projectId = $this->project_id;
-        /** @var TaskStatus $status */
-        $status = $this->status;
-
         $task = Task::create(
-            id: $id,
-            projectId: $projectId,
-            name: (string) $this->name,
-            description: (string) $this->description,
-            status: $status,
-            assignedUserId: $this->assigned_user_id
+            id: $this->id,
+            projectId: $this->project_id,
+            name: $this->name,
+            description: $this->description,
+            status: $this->status,
+            assignedUserId: UserId::fromNullable($this->assigned_user_id)
         );
-        // pull events to clear since this is a rehydration shortcut
         $task->pullDomainEvents();
 
         return $task;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Project\Domain;
 
+use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Project\Domain\Events\TaskCreated;
 use Src\Project\Domain\Events\TaskStatusChanged;
 use Src\Project\Domain\ValueObjects\ProjectId;
@@ -35,7 +36,7 @@ final class Task extends AggregateRoot
         string $name,
         string $description,
         TaskStatus $status,
-        ?string $assignedUserId
+        ?UserId $assignedUserId
     ): self {
         $task = new self;
         $task->recordAndApply(new TaskCreated(
@@ -44,7 +45,7 @@ final class Task extends AggregateRoot
             $name,
             $description,
             $status->value(),
-            $assignedUserId
+            $assignedUserId?->value()
         ));
 
         return $task;

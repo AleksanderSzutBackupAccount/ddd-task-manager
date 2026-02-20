@@ -33,6 +33,15 @@ abstract readonly class UuidValueObject implements ComparableInterface, Stringab
         }
     }
 
+    public static function fromNullable(?string $value): ?static
+    {
+        if (! $value) {
+            return null;
+        }
+
+        return new static($value);
+    }
+
     final public static function generate(): static
     {
         return new static(Uuid::uuid4()->toString());

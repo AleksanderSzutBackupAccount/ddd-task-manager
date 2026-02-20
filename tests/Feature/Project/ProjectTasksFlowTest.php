@@ -34,14 +34,14 @@ final class ProjectTasksFlowTest extends TestCase
         $commandBus = $this->app->make(CommandHandlerInterface::class);
         $queryBus = $this->app->make(QueryBusInterface::class);
 
-        $commandBus->handle(new CreateProjectCommand(name: 'Alpha', slug: 'ABCD'));
+        $commandBus->handle(new CreateProjectCommand(name: 'Alpha', slug: 'ABCD', userId: $user->id));
 
         // assign user to project (via repo to keep test minimal)
         /** @var ProjectRepository $projects */
         $projects = $this->app->make(ProjectRepository::class);
         $project = $projects->findBySlug(new ProjectSlug('ABCD'));
         $this->assertNotNull($project);
-        $project->assignUser((string) $user->id);
+        $project->assignUser($user->id);
         $projects->save($project);
 
         // when creating a task assigned to that user
@@ -49,7 +49,7 @@ final class ProjectTasksFlowTest extends TestCase
             projectSlug: 'ABCD',
             name: 'First task',
             description: 'Do something',
-            assignedUserId: (string) $user->id
+            assignedUserId: $user->id
         ));
 
         // then the task exists with id slug-uuid and assigned to user

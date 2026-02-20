@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Src\Project\Infrastructure\Laravel\Persistence;
 
+use Src\Identity\Domain\ValueObjects\UserId;
+use Src\Project\Domain\Collections\ProjectCollection;
 use Src\Project\Domain\Project;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\ValueObjects\ProjectId;
@@ -16,12 +18,11 @@ final class EloquentProjectRepository implements ProjectRepository
     {
         /** @var ProjectModel $model */
         $model = ProjectModel::query()->find((string) $project->id()) ?? new ProjectModel;
-        $model->id = (string) $project->id();
+        $model->id = $project->id();
         $model->name = $project->name();
-        $model->slug = (string) $project->slug();
+        $model->slug = $project->slug();
         $model->save();
 
-        // sync users
         $model->users()->sync($project->userIds());
     }
 
@@ -39,5 +40,15 @@ final class EloquentProjectRepository implements ProjectRepository
         $model = ProjectModel::query()->where('slug', (string) $slug)->first();
 
         return $model?->toEntity();
+    }
+
+    public function getAssignedToUser(UserId $userId): ProjectCollection
+    {
+        /** @var Project[] $projects */
+        $projects = ProjectModel::query()
+            ->whereHas('users', fn ($q) => $q->where('users.id', $userId->value()))
+            ->get()->map(fn (ProjectModel $project) => $project->toEntity())->toArray();
+
+        return new ProjectCollection($projects);
     }
 }
