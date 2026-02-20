@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src\Project\Application\UseCases\GetMembers;
 
 use Src\Project\Domain\MemberRepository;
-use Src\Project\Domain\ProjectRepository;
 use Src\Shared\Application\Bus\Query\QueryHandlerInterface;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 

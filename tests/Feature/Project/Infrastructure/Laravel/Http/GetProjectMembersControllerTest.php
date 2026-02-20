@@ -6,7 +6,6 @@ namespace Feature\Project\Infrastructure\Laravel\Http;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Src\Project\Infrastructure\Laravel\Models\ProjectModel;
 use Tests\Helpers\AuthTestTrait;
 use Tests\TestCase;
@@ -22,7 +21,7 @@ final class GetProjectMembersControllerTest extends TestCase
         $name = $this->faker->name();
         $slug = $this->faker->unique()->lexify('????');
 
-        $response = $this->callAsAuthorized()->getJson($this->getProjectEndpoint(), );
+        $response = $this->callAsAuthorized()->getJson($this->getProjectEndpoint());
 
         $response->assertStatus(200);
 
@@ -48,5 +47,4 @@ final class GetProjectMembersControllerTest extends TestCase
 
         return sprintf(self::ENDPOINT, $project->id);
     }
-
 }

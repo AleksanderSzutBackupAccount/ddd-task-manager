@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Src\Project\Application\UseCases\GetMembers;
 
 use Src\Project\Domain\Collections\MemberCollection;
-use Src\Project\Domain\Collections\ProjectCollection;
 use Src\Project\Domain\Member;
-use Src\Project\Domain\Project;
 
 final readonly class MembersResponse
 {

@@ -6,9 +6,7 @@ namespace Src\Project\Infrastructure\Laravel\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Project\Application\UseCases\GetMembers\GetMembersQuery;
-use Src\Project\Application\UseCases\GetProjects\GetProjectsQuery;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Shared\Application\Bus\Query\QueryBusInterface;
 

@@ -6,7 +6,6 @@ namespace Feature\Project\Infrastructure\Laravel\Http;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Helpers\AuthTestTrait;
 use Tests\TestCase;
 
@@ -38,5 +37,4 @@ final class GetProjectsControllerTest extends TestCase
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated']);
     }
-
 }
