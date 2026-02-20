@@ -7,6 +7,8 @@ namespace Src\Identity\Infrastructure\Laravel\Providers;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Src\Identity\Application\Ports\ExternalUserProvider;
+use Src\Identity\Application\UseCases\GetUsers\GetUsersQuery;
+use Src\Identity\Application\UseCases\GetUsers\GetUsersQueryHandler;
 use Src\Identity\Application\UseCases\LoginByEmail\LoginByEmailQuery;
 use Src\Identity\Application\UseCases\LoginByEmail\LoginByEmailQueryHandler;
 use Src\Identity\Application\UseCases\Me\MeQuery;
@@ -27,6 +29,7 @@ final class IdentityServiceProvider extends BaseContextServiceProvider
     protected array $useCases = [
         LoginByEmailQuery::class => LoginByEmailQueryHandler::class,
         MeQuery::class => MeQueryHandler::class,
+        GetUsersQuery::class => GetUsersQueryHandler::class,
     ];
 
     protected array $commands = [
