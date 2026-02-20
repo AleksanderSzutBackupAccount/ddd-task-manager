@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {useAuthStore} from '~/store/auth'
+import { useAuthStore } from '~/store/auth'
 
 definePageMeta({
   middleware: ['projects', 'protected']
 })
 
 const authStore = useAuthStore()
-const {user} = storeToRefs(authStore)
+const { user } = storeToRefs(authStore)
 
 const showBanner = ref(true)
 
@@ -20,9 +20,8 @@ onMounted(() => {
 <template>
   <div>
     <UHeader :toggle="false">
-
       <template #left>
-        <AppLogo class="w-auto h-6 shrink-0"/>
+        <AppLogo class="w-auto h-6 shrink-0" />
       </template>
       <template #right>
         <UButton
@@ -44,7 +43,7 @@ onMounted(() => {
 
     <UMain>
       <UContainer>
-        <slot/>
+        <slot />
       </UContainer>
     </UMain>
   </div>

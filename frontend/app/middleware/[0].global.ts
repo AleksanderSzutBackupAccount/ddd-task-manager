@@ -1,10 +1,10 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router'
 import { useAuthStore } from '~/store/auth'
-import {getLayout, isAuth, isBoard, isWorkspaces, isRouteProtected} from '~/middleware/route.helpers'
+import { getLayout, isAuth, isBoard, isWorkspaces, isRouteProtected } from '~/middleware/route.helpers'
 import authMiddleware from '~/middleware/modules/authMiddleware'
 import workspaceMiddleware from '~/middleware/modules/workspacesMiddleware'
 import { Routes } from '~/constants/Routes'
-import boardMiddleware from "~/middleware/modules/boardMiddleware";
+import boardMiddleware from '~/middleware/modules/boardMiddleware'
 
 export default defineNuxtRouteMiddleware(async (to: RouteLocationNormalizedGeneric) => {
   to.meta.layout = getLayout(to)

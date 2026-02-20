@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
-import {useProjectStore} from "~/store/project";
-import {Routes} from "~/constants/Routes";
+import { useProjectStore } from '~/store/project'
+import { Routes } from '~/constants/Routes'
 
 const schema = z.object({
   name: z.string().min(4),

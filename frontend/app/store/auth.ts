@@ -1,6 +1,6 @@
-import {defineStore} from "pinia";
+import { defineStore } from 'pinia'
 
-import type {User} from "~/types/user";
+import type { User } from '~/types/user'
 
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading.value = true
     errorMessage.value = null
 
-    const { data, error } = await useFetch<{token: string}>('/backend/auth/login', {
+    const { data, error } = await useFetch<{ token: string }>('/backend/auth/login', {
       method: 'POST',
       body: { email }
     })

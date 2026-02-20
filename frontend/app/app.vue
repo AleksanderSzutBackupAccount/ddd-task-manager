@@ -16,7 +16,6 @@ useHead({
     lang: 'en'
   }
 })
-
 </script>
 
 <template>
@@ -26,6 +25,5 @@ useHead({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-
   </UApp>
 </template>

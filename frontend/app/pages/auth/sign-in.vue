@@ -3,7 +3,7 @@ import * as z from 'zod'
 import { useRouter } from 'vue-router'
 import type { FormSubmitEvent } from '#ui/types'
 import { useAuthStore } from '~/store/auth'
-import {storeToRefs} from "pinia";
+import { storeToRefs } from 'pinia'
 
 const toast = useToast()
 const router = useRouter()
@@ -26,7 +26,7 @@ const fields = [{
 }]
 
 const schema = z.object({
-  email: z.email('Invalid email'),
+  email: z.email('Invalid email')
 })
 
 const onSubmit = async (payload: FormSubmitEvent<Schema>) => {

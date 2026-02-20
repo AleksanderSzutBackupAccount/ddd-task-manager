@@ -1,5 +1,5 @@
 import type { RouteLocationNormalizedGeneric } from 'vue-router'
-import type {LayoutKey} from "#build/types/nitro-layouts";
+import type { LayoutKey } from '#build/types/nitro-layouts'
 
 export const isAuth = (to: RouteLocationNormalizedGeneric): boolean => {
   return to.path.startsWith('/auth')

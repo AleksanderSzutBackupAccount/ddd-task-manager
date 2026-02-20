@@ -1,7 +1,7 @@
-import {defineStore} from 'pinia'
-import {useAuthStore} from '~/store/auth'
+import { defineStore } from 'pinia'
+import { useAuthStore } from '~/store/auth'
 
-import type {User} from "~/types/user";
+import type { User } from '~/types/user'
 
 type Project = {
   id: string
@@ -9,7 +9,7 @@ type Project = {
   slug: string
 }
 export const useProjectStore = defineStore('project', () => {
-  const {token} = storeToRefs(useAuthStore())
+  const { token } = storeToRefs(useAuthStore())
 
   const currentProject = ref<string | null>()
 
@@ -23,8 +23,8 @@ export const useProjectStore = defineStore('project', () => {
 
     try {
       projects.value = await $fetch('/backend/projects', { headers: {
-          Authorization: `Bearer ${token.value}`
-        }})
+        Authorization: `Bearer ${token.value}`
+      } })
       return projects.value
     } catch (e: any) {
       error.value = e?.message ?? 'Błąd pobierania'
@@ -42,11 +42,10 @@ export const useProjectStore = defineStore('project', () => {
     return false
   }
 
-
   const createProject = async (name: string, slug: string) => {
-    const {data, error} = await useFetch<User>('/backend/projects', {
+    const { data, error } = await useFetch<User>('/backend/projects', {
       method: 'POST',
-      body: {name, slug},
+      body: { name, slug },
       headers: {
         Authorization: `Bearer ${token.value}`
       }

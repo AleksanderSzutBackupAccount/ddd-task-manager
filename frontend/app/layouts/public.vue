@@ -1,5 +1,4 @@
 <script setup>
-
 // const user = useSupabaseUser()
 
 onMounted(() => {
