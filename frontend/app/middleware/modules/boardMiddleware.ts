@@ -2,11 +2,11 @@ import type { RouteLocationNormalizedGeneric } from 'vue-router'
 
 import { storeToRefs } from 'pinia'
 import { Routes } from '~/constants/Routes'
-import { useProjectStore } from '~/store/project'
+import { useWorkspacesStore } from '~/store/workspaces'
 
-export default async function (to: RouteLocationNormalizedGeneric, authToken: null | string) {
-  const projectId = to.params.projectId as string | undefined
-  const projectStore = useProjectStore()
+export default async function (to: RouteLocationNormalizedGeneric, _authToken: null | string) {
+  const projectId = to.params.id as string | undefined
+  const projectStore = useWorkspacesStore()
 
   const { currentProject } = storeToRefs(projectStore)
 
@@ -14,10 +14,10 @@ export default async function (to: RouteLocationNormalizedGeneric, authToken: nu
     if (currentProject.value === null) {
       return navigateTo(Routes.workspaces)
     }
-    return navigateTo(`/project/${currentProject}`)
+    return navigateTo(`/project/${currentProject.value.slug}`)
   }
 
-  if (!projectStore.setProject(projectId)) {
-    return navigateTo(Routes.project)
+  if (!await projectStore.setProject(projectId)) {
+    return navigateTo(Routes.workspaces)
   }
 }

@@ -6,7 +6,7 @@ export const isAuth = (to: RouteLocationNormalizedGeneric): boolean => {
 }
 
 export const isBoard = (to: RouteLocationNormalizedGeneric): boolean => {
-  return /^\/project\/[^/]+\/board/.test(to.path)
+  return to.path.startsWith('/project')
 }
 
 export const isWorkspaces = (to: RouteLocationNormalizedGeneric): boolean => {

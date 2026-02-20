@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { useProjectStore } from '~/store/project'
+import { useWorkspacesStore } from '~/store/workspaces'
+import { useUsersStore } from '~/store/users'
 
-const store = useProjectStore()
+const store = useWorkspacesStore()
+const usersStore = useUsersStore()
 const { projects } = storeToRefs(store)
-await useAsyncData('projects', () => store.fetchProjects())
+
+await Promise.all([
+  useAsyncData('projects', () => store.fetchProjects()),
+  useAsyncData('users', () => usersStore.fetchUsers())
+])
+
+const getUserName = (userId: string) => {
+  return usersStore.users.find(u => u.id === userId)?.name || 'User'
+}
 </script>
 
 <template>
@@ -15,24 +25,20 @@ await useAsyncData('projects', () => store.fetchProjects())
         <h2 class="text-lg font-bold" />
       </template>
       <UPageGrid>
-        <UPageCard
+        <WorkspaceCard
           v-for="project in projects"
           :key="project.id"
-          :class="[
-            'cursor-pointer transition'
-          ]"
-          :title="project.name"
-          :to="`/workspace/${project.id}`"
-          icon="i-material-symbols:add-business-outline-rounded"
+          :project="project"
+          :get-user-name="getUserName"
         />
         <UPageCard
-          title="Create new Project"
+          title="Create new Workspaces"
           description=""
           icon="i-material-symbols:add-business-outline-rounded"
         >
           <template #footer>
             <UButton to="/workspace/create">
-              Create New Project
+              Create New Workspaces
             </UButton>
           </template>
         </UPageCard>

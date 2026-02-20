@@ -1,9 +1,9 @@
-import type { RouteLocationNormalizedGeneric } from 'vue-router'
-import { useAuthStore } from '~/store/auth'
-import { getLayout, isAuth, isBoard, isWorkspaces, isRouteProtected } from '~/middleware/route.helpers'
+import type {RouteLocationNormalizedGeneric} from 'vue-router'
+import {useAuthStore} from '~/store/auth'
+import {getLayout, isAuth, isBoard, isWorkspaces, isRouteProtected} from '~/middleware/route.helpers'
 import authMiddleware from '~/middleware/modules/authMiddleware'
 import workspaceMiddleware from '~/middleware/modules/workspacesMiddleware'
-import { Routes } from '~/constants/Routes'
+import {Routes} from '~/constants/Routes'
 import boardMiddleware from '~/middleware/modules/boardMiddleware'
 
 export default defineNuxtRouteMiddleware(async (to: RouteLocationNormalizedGeneric) => {
@@ -11,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to: RouteLocationNormalizedGener
 
   const authStore = useAuthStore()
 
-  const { user, token } = authStore
+  const {user, token} = authStore
 
   if (isAuth(to)) {
     return authMiddleware(to, token)
@@ -24,11 +24,11 @@ export default defineNuxtRouteMiddleware(async (to: RouteLocationNormalizedGener
     await authStore.fetchUserData()
   }
 
-  if (!isWorkspaces(to)) {
-    return
+  if (isWorkspaces(to)) {
+    return workspaceMiddleware(to, token)
   }
   if (isBoard(to)) {
     return boardMiddleware(to, token)
   }
-  return workspaceMiddleware(to, token)
+
 })

@@ -1,32 +1,25 @@
 <script setup lang="ts">
-import * as z from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
-import { useProjectStore } from '~/store/project'
+import { useWorkspacesStore } from '~/store/workspaces'
+import { useUsersStore } from '~/store/users'
 import { Routes } from '~/constants/Routes'
 
-const schema = z.object({
-  name: z.string().min(4),
-  slug: z.string().regex(/^[a-z]+$/).max(4)
-})
-
 const toast = useToast()
-type Schema = z.output<typeof schema>
+const store = useWorkspacesStore()
+const usersStore = useUsersStore()
 
-const state = reactive<Partial<Schema>>({
-  name: undefined,
-  slug: undefined
+onMounted(async () => {
+  await usersStore.fetchUsers()
 })
-const { createProject } = useProjectStore()
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+const onSubmit = async (data: { name: string, slug: string, userIds: string[] }) => {
   try {
-    const data = await createProject(event.data.name, event.data.slug)
+    await store.createProject(data.name, data.slug, data.userIds)
     navigateTo(Routes.workspaces)
-  } catch (error) {
+  } catch (error: unknown) {
     toast.add({
-      title: 'Error when create project',
-      description: error.message,
-      icon: 'i-lucide-check-circle',
+      title: 'Error when creating project',
+      description: error instanceof Error ? error.message : 'Something went wrong',
+      icon: 'i-lucide-alert-circle',
       color: 'error'
     })
   }
@@ -48,62 +41,17 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
         />
 
         <span class="text-sm truncate">
-          Create Project
+          Create Workspaces
         </span>
       </template>
-      <UForm
-        class="space-y-4"
-        :schema="schema"
-        :state="state"
+      <WorkspaceForm
+        :users="usersStore.users"
+        :loading="store.loading"
         @submit="onSubmit"
-      >
-        <UFormField
-          label="Project Name"
-          name="name"
-          required
-        >
-          <UInput
-            v-model="state.name"
-            class="w-full"
-            placeholder="Project Name"
-          />
-        </UFormField>
-        <UFormField
-          label="Slug"
-          name="slug"
-          required
-        >
-          <UInput
-            v-model="state.slug"
-            class="w-full"
-            placeholder="Description of project for AI"
-            autoresize
-            required
-            :rows="4"
-            :disabled="false"
-          />
-        </UFormField>
-
-        <div class="flex items-center justify-between gap-2">
-          <UButton
-            variant="solid"
-            color="neutral"
-            to="/workspace"
-          >
-            Back to select
-          </UButton>
-          <UButton
-            type="submit"
-            variant="solid"
-          >
-            Create
-          </UButton>
-        </div>
-      </UForm>
+      />
     </UCard>
   </UPageSection>
 </template>
 
 <style scoped>
-
 </style>
