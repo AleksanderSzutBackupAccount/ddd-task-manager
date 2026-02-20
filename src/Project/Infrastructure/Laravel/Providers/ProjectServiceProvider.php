@@ -11,6 +11,8 @@ use Src\Project\Application\UseCases\CreateProject\CreateProjectCommand;
 use Src\Project\Application\UseCases\CreateProject\CreateProjectCommandHandler;
 use Src\Project\Application\UseCases\CreateTask\CreateTaskCommand;
 use Src\Project\Application\UseCases\CreateTask\CreateTaskCommandHandler;
+use Src\Project\Application\UseCases\GetMembers\GetMembersQuery;
+use Src\Project\Application\UseCases\GetMembers\GetMembersQueryHandler;
 use Src\Project\Application\UseCases\GetProjects\GetProjectsQuery;
 use Src\Project\Application\UseCases\GetProjects\GetProjectsQueryHandler;
 use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQuery;
@@ -48,5 +50,6 @@ final class ProjectServiceProvider extends BaseContextServiceProvider
         GetUserTasksQuery::class => GetUserTasksQueryHandler::class,
         GetProjectsQuery::class => GetProjectsQueryHandler::class,
         GetTaskHistoryQuery::class => GetTaskHistoryQueryHandler::class,
+        GetMembersQuery::class => GetMembersQueryHandler::class,
     ];
 }

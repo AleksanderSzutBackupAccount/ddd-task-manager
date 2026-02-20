@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Infrastructure\Laravel\Http;
+namespace Src\Project\Infrastructure\Laravel\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

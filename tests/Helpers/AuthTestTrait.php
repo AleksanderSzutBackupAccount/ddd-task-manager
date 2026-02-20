@@ -26,7 +26,7 @@ trait AuthTestTrait
         return app(TokenGeneratorInterface::class)->generate($user->id->value, ['email' => $user->email->value]);
     }
 
-    protected function callAsAuthorized(?UserId $id = null): mixed
+    protected function callAsAuthorized(?UserId $id = null): self
     {
         $token = $this->getUserJwtToken($id);
 

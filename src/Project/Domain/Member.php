@@ -9,7 +9,7 @@ use Src\Identity\Domain\ValueObjects\UserId;
 final readonly class Member
 {
     public function __construct(
-        public UserId $userId,
+        public UserId $id,
         public string $name,
     ) {}
 }
