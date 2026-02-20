@@ -24,7 +24,8 @@ final readonly class CreateProjectController
         $this->commandHandler->handle(new CreateProjectCommand(
             $request->name,
             $request->slug,
-            new UserId($userId)
+            new UserId($userId),
+            $request->userIds ?? []
         ));
 
         return new JsonResponse;

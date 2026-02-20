@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Application\UseCases\GetTaskHistory;
+namespace Src\Project\Application\UseCases\Task\GetTaskHistory;
 
 use Src\Shared\Application\Bus\Query\QueryInterface;
 

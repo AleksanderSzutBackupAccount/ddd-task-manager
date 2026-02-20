@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * @property string $name
  * @property string $slug
+ * @property string[] $userIds
  */
 final class CreateProjectRequest extends FormRequest
 {
@@ -21,6 +22,8 @@ final class CreateProjectRequest extends FormRequest
             'name' => ['required', 'string'],
             'slug' => ['required', 'string', 'unique:projects,slug', 'max:4',
                 'regex:/^[a-z]+$/'],
+            'userIds' => ['sometimes', 'array'],
+            'userIds.*' => ['uuid', 'exists:users,id'],
         ];
     }
 }

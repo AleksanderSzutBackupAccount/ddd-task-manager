@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Application\UseCases\CreateTask;
+namespace Src\Project\Application\UseCases\Task\CreateTask;
 
 use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Shared\Domain\Bus\CommandInterface;

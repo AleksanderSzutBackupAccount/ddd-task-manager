@@ -17,7 +17,7 @@ final readonly class MembersResponse
     public function toResponse(): array
     {
         return $this->members->map(static fn (Member $member) => [
-            'id' => $member->id,
+            'id' => $member->id->value,
             'name' => $member->name,
         ]);
     }

@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Project;
+namespace Feature\Project\Infrastructure\Laravel\Http;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Ramsey\Uuid\Uuid;
 use Src\Identity\Infrastructure\Laravel\Models\UserModel;
-use Src\Project\Application\UseCases\ChangeTaskStatus\ChangeTaskStatusCommand;
 use Src\Project\Application\UseCases\CreateProject\CreateProjectCommand;
-use Src\Project\Application\UseCases\CreateTask\CreateTaskCommand;
-use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQuery;
+use Src\Project\Application\UseCases\Task\ChangeTaskStatus\ChangeTaskStatusCommand;
+use Src\Project\Application\UseCases\Task\CreateTask\CreateTaskCommand;
+use Src\Project\Application\UseCases\Task\GetTaskHistory\GetTaskHistoryQuery;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\ValueObjects\ProjectSlug;
 use Src\Project\Domain\ValueObjects\TaskStatus;
@@ -52,11 +51,23 @@ final class ProjectTasksFlowTest extends TestCase
             assignedUserId: $user->id
         ));
 
-        // then the task exists with id slug-uuid and assigned to user
+        // then the task exists with id UUID and slug ABCD-1
         /** @var TaskModel $taskModel */
         $taskModel = TaskModel::query()->where('name', 'First task')->firstOrFail();
-        $this->assertMatchesRegularExpression('/^ABCD\-[0-9a-fA-F\-]{36}$/', (string) $taskModel->id);
+        $this->assertMatchesRegularExpression('/^[0-9a-fA-F\-]{36}$/', (string) $taskModel->id);
+        $this->assertSame('ABCD-1', (string) $taskModel->slug);
         $this->assertSame((string) $user->id, $taskModel->assigned_user_id);
+
+        // when creating a second task
+        $commandBus->handle(new CreateTaskCommand(
+            projectSlug: 'ABCD',
+            name: 'Second task',
+            description: 'Do something else',
+            assignedUserId: $user->id
+        ));
+
+        $secondTask = TaskModel::query()->where('name', 'Second task')->firstOrFail();
+        $this->assertSame('ABCD-2', (string) $secondTask->slug);
 
         // and when changing status to Done
         $commandBus->handle(new ChangeTaskStatusCommand(

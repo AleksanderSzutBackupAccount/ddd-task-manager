@@ -29,6 +29,7 @@ final class TaskProjector implements EventProjector
         TaskModel::query()->create(
             ['id' => $event->aggregateId(),
                 'project_id' => $event->projectId,
+                'slug' => $event->slug,
                 'name' => $event->name,
                 'description' => $event->description,
                 'status' => $event->status,

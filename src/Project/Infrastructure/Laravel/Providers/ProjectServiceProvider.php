@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace Src\Project\Infrastructure\Laravel\Providers;
 
 use Src\Project\Application\Projectors\TaskProjector;
-use Src\Project\Application\UseCases\ChangeTaskStatus\ChangeTaskStatusCommand;
-use Src\Project\Application\UseCases\ChangeTaskStatus\ChangeTaskStatusCommandHandler;
 use Src\Project\Application\UseCases\CreateProject\CreateProjectCommand;
 use Src\Project\Application\UseCases\CreateProject\CreateProjectCommandHandler;
-use Src\Project\Application\UseCases\CreateTask\CreateTaskCommand;
-use Src\Project\Application\UseCases\CreateTask\CreateTaskCommandHandler;
 use Src\Project\Application\UseCases\GetMembers\GetMembersQuery;
 use Src\Project\Application\UseCases\GetMembers\GetMembersQueryHandler;
 use Src\Project\Application\UseCases\GetProjects\GetProjectsQuery;
 use Src\Project\Application\UseCases\GetProjects\GetProjectsQueryHandler;
-use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQuery;
-use Src\Project\Application\UseCases\GetTaskHistory\GetTaskHistoryQueryHandler;
-use Src\Project\Application\UseCases\GetUserTasks\GetUserTasksQuery;
-use Src\Project\Application\UseCases\GetUserTasks\GetUserTasksQueryHandler;
+use Src\Project\Application\UseCases\Task\ChangeTaskStatus\ChangeTaskStatusCommand;
+use Src\Project\Application\UseCases\Task\ChangeTaskStatus\ChangeTaskStatusCommandHandler;
+use Src\Project\Application\UseCases\Task\CreateTask\CreateTaskCommand;
+use Src\Project\Application\UseCases\Task\CreateTask\CreateTaskCommandHandler;
+use Src\Project\Application\UseCases\Task\GetAllTasks\GetAllTasksQuery;
+use Src\Project\Application\UseCases\Task\GetAllTasks\GetAllTasksQueryHandler;
+use Src\Project\Application\UseCases\Task\GetTaskHistory\GetTaskHistoryQuery;
+use Src\Project\Application\UseCases\Task\GetTaskHistory\GetTaskHistoryQueryHandler;
+use Src\Project\Application\UseCases\Task\GetUserTasks\GetUserTasksQuery;
+use Src\Project\Application\UseCases\Task\GetUserTasks\GetUserTasksQueryHandler;
 use Src\Project\Domain\MemberRepository;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\TaskReadRepository;
@@ -51,5 +53,6 @@ final class ProjectServiceProvider extends BaseContextServiceProvider
         GetProjectsQuery::class => GetProjectsQueryHandler::class,
         GetTaskHistoryQuery::class => GetTaskHistoryQueryHandler::class,
         GetMembersQuery::class => GetMembersQueryHandler::class,
+        GetAllTasksQuery::class => GetAllTasksQueryHandler::class,
     ];
 }

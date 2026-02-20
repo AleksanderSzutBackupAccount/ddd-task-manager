@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Application\UseCases\CreateTask;
+namespace Src\Project\Application\UseCases\Task\CreateTask;
 
-use Ramsey\Uuid\Uuid;
 use Src\Project\Domain\Exceptions\ProjectNotFoundException;
 use Src\Project\Domain\Exceptions\UserNotInProjectException;
 use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\Task;
+use Src\Project\Domain\TaskReadRepository;
 use Src\Project\Domain\TaskWriteRepository;
 use Src\Project\Domain\ValueObjects\ProjectSlug;
 use Src\Project\Domain\ValueObjects\TaskId;
+use Src\Project\Domain\ValueObjects\TaskSlug;
 use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
 use Src\Shared\Domain\Bus\CommandInterface;
@@ -20,7 +21,8 @@ final readonly class CreateTaskCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ProjectRepository $projects,
-        private TaskWriteRepository $tasks
+        private TaskWriteRepository $tasks,
+        private TaskReadRepository $taskReadRepository
     ) {}
 
     public function handle(CommandInterface $command): void
@@ -35,12 +37,14 @@ final readonly class CreateTaskCommandHandler implements CommandHandlerInterface
             throw new UserNotInProjectException;
         }
 
-        $uuid = Uuid::uuid4()->toString();
-        $taskId = TaskId::fromSlugAndUuid((string) $project->slug(), $uuid);
+        $taskId = TaskId::generate();
+        $taskCount = $this->taskReadRepository->countByProject($project->id());
+        $taskSlug = new TaskSlug(sprintf('%s-%d', (string) $project->slug(), $taskCount + 1));
 
         $task = Task::create(
             id: $taskId,
             projectId: $project->id(),
+            slug: $taskSlug,
             name: $command->name,
             description: $command->description,
             status: TaskStatus::toDo(),

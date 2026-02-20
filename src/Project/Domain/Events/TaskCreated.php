@@ -11,6 +11,7 @@ final readonly class TaskCreated extends DomainEventStored
     public function __construct(
         string $id,
         public string $projectId,
+        public string $slug,
         public string $name,
         public string $description,
         public string $status,
@@ -37,6 +38,7 @@ final readonly class TaskCreated extends DomainEventStored
         return new self(
             $aggregateId,
             (string) $body['projectId'],
+            (string) $body['slug'],
             (string) $body['name'],
             (string) $body['description'],
             (string) $body['status'],
@@ -51,6 +53,7 @@ final readonly class TaskCreated extends DomainEventStored
     {
         return [
             'projectId' => $this->projectId,
+            'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
             'status' => $this->status,

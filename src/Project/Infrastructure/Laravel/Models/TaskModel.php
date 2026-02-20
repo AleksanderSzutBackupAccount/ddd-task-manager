@@ -9,11 +9,13 @@ use Src\Identity\Domain\ValueObjects\UserId;
 use Src\Project\Domain\Task;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Project\Domain\ValueObjects\TaskId;
+use Src\Project\Domain\ValueObjects\TaskSlug;
 use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Shared\Infrastructure\Laravel\CastableModel;
 
 /**
  * @property TaskId $id
+ * @property TaskSlug $slug
  * @property ProjectId $project_id
  * @property string $name
  * @property string $description
@@ -29,11 +31,12 @@ final class TaskModel extends CastableModel
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id', 'project_id', 'name', 'description', 'status', 'assigned_user_id', 'created_at', 'updated_at',
+        'id', 'slug', 'project_id', 'name', 'description', 'status', 'assigned_user_id', 'created_at', 'updated_at',
     ];
 
     public $casts = [
         'id' => TaskId::class,
+        'slug' => TaskSlug::class,
         'project_id' => ProjectId::class,
         'status' => TaskStatus::class,
         'created_at' => 'immutable_datetime',
@@ -61,6 +64,7 @@ final class TaskModel extends CastableModel
         $task = Task::create(
             id: $this->id,
             projectId: $this->project_id,
+            slug: $this->slug,
             name: $this->name,
             description: $this->description,
             status: $this->status,

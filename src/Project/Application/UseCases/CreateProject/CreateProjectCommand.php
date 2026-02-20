@@ -9,9 +9,13 @@ use Src\Shared\Domain\Bus\CommandInterface;
 
 final readonly class CreateProjectCommand implements CommandInterface
 {
+    /**
+     * @param  string[]  $userIds
+     */
     public function __construct(
         public string $name,
         public string $slug,
         public UserId $userId,
+        public array $userIds = []
     ) {}
 }

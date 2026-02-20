@@ -17,9 +17,9 @@ final readonly class ProjectsResponse
     public function toResponse(): array
     {
         return $this->projects->map(static fn (Project $project) => [
-            'id' => $project->id(),
+            'id' => $project->id()->value(),
             'name' => $project->name(),
-            'slug' => $project->slug(),
+            'slug' => $project->slug()->value(),
             'users' => $project->userIds(),
         ]);
     }

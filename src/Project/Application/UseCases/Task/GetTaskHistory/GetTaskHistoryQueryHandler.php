@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Application\UseCases\GetTaskHistory;
+namespace Src\Project\Application\UseCases\Task\GetTaskHistory;
 
 use Src\Project\Domain\TaskReadRepository;
 use Src\Project\Domain\ValueObjects\TaskId;

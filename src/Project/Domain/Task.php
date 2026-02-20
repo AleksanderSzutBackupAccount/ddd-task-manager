@@ -9,6 +9,7 @@ use Src\Project\Domain\Events\TaskCreated;
 use Src\Project\Domain\Events\TaskStatusChanged;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Project\Domain\ValueObjects\TaskId;
+use Src\Project\Domain\ValueObjects\TaskSlug;
 use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Shared\Domain\Aggregate\AggregateRoot;
 use Src\Shared\Domain\Bus\DomainEvent;
@@ -19,6 +20,8 @@ final class Task extends AggregateRoot
     private TaskId $id;
 
     private ProjectId $projectId;
+
+    private TaskSlug $slug;
 
     private string $name;
 
@@ -33,6 +36,7 @@ final class Task extends AggregateRoot
     public static function create(
         TaskId $id,
         ProjectId $projectId,
+        TaskSlug $slug,
         string $name,
         string $description,
         TaskStatus $status,
@@ -42,6 +46,7 @@ final class Task extends AggregateRoot
         $task->recordAndApply(new TaskCreated(
             $id->value(),
             $projectId->value(),
+            $slug->value(),
             $name,
             $description,
             $status->value(),
@@ -75,6 +80,7 @@ final class Task extends AggregateRoot
     {
         $this->id = new TaskId($event->aggregateId());
         $this->projectId = new ProjectId($event->projectId);
+        $this->slug = new TaskSlug($event->slug);
         $this->name = $event->name;
         $this->description = $event->description;
         $this->status = new TaskStatus($event->status);
@@ -110,6 +116,11 @@ final class Task extends AggregateRoot
     public function projectId(): ProjectId
     {
         return $this->projectId;
+    }
+
+    public function slug(): TaskSlug
+    {
+        return $this->slug;
     }
 
     public function name(): string

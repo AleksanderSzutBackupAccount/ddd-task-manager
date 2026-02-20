@@ -16,6 +16,6 @@ final readonly class UserResponse
      */
     public function toResponse(): array
     {
-        return $this->users->map(fn (User $user) => ['id' => $user->id, 'name' => $user->name]);
+        return $this->users->map(fn (User $user) => ['id' => $user->id->value, 'name' => $user->name->value]);
     }
 }

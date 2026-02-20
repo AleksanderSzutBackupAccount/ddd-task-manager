@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Application\UseCases\ChangeTaskStatus;
+namespace Src\Project\Application\UseCases\Task\ChangeTaskStatus;
 
 use Src\Project\Domain\Exceptions\TaskNotFoundException;
 use Src\Project\Domain\TaskWriteRepository;

@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Src\Project\Application\UseCases\GetAllTasks;
+namespace Src\Project\Application\UseCases\Task\GetAllTasks;
 
+use Src\Project\Application\UseCases\Task\TaskResponse;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Shared\Application\Bus\Query\QueryInterface;
 
 /**
- * @implements QueryInterface<array>
+ * @implements QueryInterface<TaskResponse>
  */
 final readonly class GetAllTasksQuery implements QueryInterface
 {
