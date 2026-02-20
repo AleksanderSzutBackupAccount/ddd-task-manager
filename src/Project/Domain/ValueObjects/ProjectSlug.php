@@ -9,6 +9,11 @@ use Src\Shared\Domain\ValueObjects\StringValueObject;
 
 final readonly class ProjectSlug extends StringValueObject
 {
+    public function __construct(string $value)
+    {
+        parent::__construct(strtoupper($value));
+    }
+
     protected function validate(): void
     {
         if (strlen($this->value) > 4) {

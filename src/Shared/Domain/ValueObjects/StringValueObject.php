@@ -9,7 +9,7 @@ use Stringable;
 
 abstract readonly class StringValueObject implements ComparableInterface, Stringable, ValueObjectInterface
 {
-    final public function __construct(public string $value)
+    public function __construct(public string $value)
     {
         $this->validate();
     }

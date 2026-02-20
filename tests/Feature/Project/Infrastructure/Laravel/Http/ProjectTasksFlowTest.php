@@ -33,7 +33,7 @@ final class ProjectTasksFlowTest extends TestCase
         $commandBus = $this->app->make(CommandHandlerInterface::class);
         $queryBus = $this->app->make(QueryBusInterface::class);
 
-        $commandBus->handle(new CreateProjectCommand(name: 'Alpha', slug: 'ABCD', userId: $user->id));
+        $commandBus->handle(new CreateProjectCommand(name: 'Alpha', slug: 'abcd', userId: $user->id));
 
         // assign user to project (via repo to keep test minimal)
         /** @var ProjectRepository $projects */
@@ -45,7 +45,7 @@ final class ProjectTasksFlowTest extends TestCase
 
         // when creating a task assigned to that user
         $commandBus->handle(new CreateTaskCommand(
-            projectSlug: 'ABCD',
+            projectSlug: 'abcd',
             name: 'First task',
             description: 'Do something',
             assignedUserId: $user->id
@@ -60,7 +60,7 @@ final class ProjectTasksFlowTest extends TestCase
 
         // when creating a second task
         $commandBus->handle(new CreateTaskCommand(
-            projectSlug: 'ABCD',
+            projectSlug: 'abcd',
             name: 'Second task',
             description: 'Do something else',
             assignedUserId: $user->id

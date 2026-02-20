@@ -20,7 +20,7 @@ final class EloquentProjectRepository implements ProjectRepository
         $model = ProjectModel::query()->find((string) $project->id()) ?? new ProjectModel;
         $model->id = $project->id();
         $model->name = $project->name();
-        $model->slug = $project->slug();
+        $model->slug = (string) $project->slug();
         $model->save();
 
         $model->users()->sync($project->userIds());

@@ -21,7 +21,7 @@ final class CreateProjectRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'slug' => ['required', 'string', 'unique:projects,slug', 'max:4',
-                'regex:/^[a-z]+$/'],
+                'regex:/^[a-zA-Z]+$/'],
             'userIds' => ['sometimes', 'array'],
             'userIds.*' => ['uuid', 'exists:users,id'],
         ];

@@ -59,7 +59,7 @@ final class CreateProjectControllerTest extends TestCase
     {
         $this->callAsAuthorized()->postJson(self::ENDPOINT, [
             'name' => 'Existing Project',
-            'slug' => 'exis',
+            'slug' => 'EXIS',
         ])->assertStatus(200);
 
         $response = $this->callAsAuthorized()->postJson(self::ENDPOINT, [
@@ -75,7 +75,7 @@ final class CreateProjectControllerTest extends TestCase
     {
         return [
             'slug too long' => ['tolong', 'max'],
-            'slug not unique' => ['exis', 'unique'],
+            'slug not unique' => ['EXIS', 'unique'],
         ];
     }
 }

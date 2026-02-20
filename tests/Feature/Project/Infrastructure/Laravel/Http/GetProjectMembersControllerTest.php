@@ -25,8 +25,6 @@ final class GetProjectMembersControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $token = $response->isEmpty();
-
     }
 
     public function test_it_returns_unauthorized_when_no_token_provided(): void
@@ -39,12 +37,13 @@ final class GetProjectMembersControllerTest extends TestCase
 
     private function getProjectEndpoint(): string
     {
+        $slug = $this->faker->unique()->lexify('????');
         $project = ProjectModel::query()->create([
             'id' => $this->faker->uuid(),
             'name' => $this->faker->name(),
-            'slug' => $this->faker->unique()->lexify('????'),
+            'slug' => strtoupper($slug),
         ]);
 
-        return sprintf(self::ENDPOINT, $project->id);
+        return sprintf(self::ENDPOINT, (string) $project->slug);
     }
 }
