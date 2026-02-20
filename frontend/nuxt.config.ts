@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@pinia/nuxt'
   ],
 
   devtools: {
@@ -18,7 +19,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-15',
   nitro: {
     routeRules: {
-      '/api/**': {
+      '/backend/**': {
         proxy: {
           to: 'http://localhost/api/**'
         }
