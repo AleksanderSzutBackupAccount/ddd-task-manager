@@ -48,7 +48,6 @@ deptrac:
       - Domain
       - Application
       - Infrastructure
-      - Laravel
       - UI
     Domain:
       - Domain
