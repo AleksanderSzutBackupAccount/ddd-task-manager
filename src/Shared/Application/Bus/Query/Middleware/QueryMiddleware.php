@@ -11,8 +11,9 @@ interface QueryMiddleware
     /**
      * @template R
      *
-     * @param  QueryInterface<R>  $query
-     * @param  callable(QueryInterface<R>):R  $next
+     * @param QueryInterface<R>             $query
+     * @param callable(QueryInterface<R>):R $next
+     *
      * @return R
      */
     public function __invoke(QueryInterface $query, callable $next);

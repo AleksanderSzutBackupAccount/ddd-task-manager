@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Src\Identity\Infrastructure\Lcobucci;
 
-use DateTimeImmutable;
 use Src\Identity\Application\Ports\TokenGeneratorInterface;
 use Src\Identity\Domain\User;
 
 final readonly class JwtTokenGenerator implements TokenGeneratorInterface
 {
-    public function __construct(private LcobucciConfigProvider $configProvider) {}
+    public function __construct(private LcobucciConfigProvider $configProvider)
+    {
+    }
 
     public function generate(User $user): string
     {
-        $now = new DateTimeImmutable;
+        $now = new \DateTimeImmutable();
 
         /** @var non-empty-string $id */
         $id = $user->id->value;

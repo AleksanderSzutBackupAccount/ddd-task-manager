@@ -11,5 +11,7 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
  */
 final readonly class GetUsersQuery implements QueryInterface
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }

@@ -9,18 +9,19 @@ use Src\Project\Domain\TaskWriteRepository;
 use Src\Project\Domain\ValueObjects\TaskId;
 use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
-use Src\Shared\Domain\Bus\CommandInterface;
 
 final readonly class ChangeTaskStatusCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private TaskWriteRepository $tasks) {}
+    public function __construct(
+        private TaskWriteRepository $tasks,
+    ) {
+    }
 
-    public function handle(CommandInterface $command): void
+    public function __invoke(ChangeTaskStatusCommand $command): void
     {
-        /** @var ChangeTaskStatusCommand $command */
         $task = $this->tasks->findById(new TaskId($command->taskId));
-        if ($task === null) {
-            throw new TaskNotFoundException;
+        if (null === $task) {
+            throw new TaskNotFoundException();
         }
 
         $task->changeStatus(new TaskStatus($command->newStatus));

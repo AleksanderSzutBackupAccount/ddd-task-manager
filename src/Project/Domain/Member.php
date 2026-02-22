@@ -11,5 +11,6 @@ final readonly class Member
     public function __construct(
         public UserId $id,
         public string $name,
-    ) {}
+    ) {
+    }
 }

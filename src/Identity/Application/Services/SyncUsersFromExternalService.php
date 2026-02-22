@@ -17,7 +17,8 @@ final readonly class SyncUsersFromExternalService
     public function __construct(
         private ExternalUserProvider $provider,
         private UserRepository $users,
-    ) {}
+    ) {
+    }
 
     /**
      * @return int number of synced users
@@ -30,7 +31,7 @@ final readonly class SyncUsersFromExternalService
 
         foreach ($externalUsers as $external) {
             $user = User::import(
-                name: new Username($external->username),
+                name: new UserName($external->username),
                 email: UserEmail::fromString($external->email),
                 externalId: new UserExternalId($external->externalId),
             );

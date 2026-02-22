@@ -14,7 +14,8 @@ final readonly class UserJsonPlaceholderProvider implements ExternalUserProvider
     public function __construct(
         private ClientInterface $http,
         private string $baseUrl = 'https://jsonplaceholder.typicode.com',
-    ) {}
+    ) {
+    }
 
     /**
      * @throws GuzzleException
@@ -32,31 +33,40 @@ final readonly class UserJsonPlaceholderProvider implements ExternalUserProvider
 
         $data = json_decode($json, true);
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             throw new \DomainException('Invalid JSONPlaceholder response.');
         }
 
         $users = [];
 
         foreach ($data as $row) {
-            if (! is_array($row)) {
+            if (!is_array($row)) {
                 continue;
             }
 
-            $id = isset($row['id']) ? (string) $row['id'] : '';
-            $username = isset($row['username']) ? (string) $row['username'] : '';
-            $email = isset($row['email']) ? (string) $row['email'] : '';
-            $name = isset($row['name']) ? (string) $row['name'] : '';
+            $id = isset($row['id']) ? $row['id'] : '';
+            $username = isset($row['username']) ? $row['username'] : '';
+            $email = isset($row['email']) ? $row['email'] : '';
+            $name = isset($row['name']) ? $row['name'] : '';
 
-            if ($id === '' || $username === '' || $email === '' || $name === '') {
+            if (!is_scalar($id) || !is_scalar($username) || !is_scalar($email) || !is_scalar($name)) {
+                continue;
+            }
+
+            $idStr = (string) $id;
+            $usernameStr = (string) $username;
+            $emailStr = (string) $email;
+            $nameStr = (string) $name;
+
+            if ('' === $idStr || '' === $usernameStr || '' === $emailStr || '' === $nameStr) {
                 continue;
             }
 
             $users[] = new ExternalUser(
-                externalId: $id,
-                username: $username,
-                email: $email,
-                name: $name,
+                externalId: $idStr,
+                username: $usernameStr,
+                email: $emailStr,
+                name: $nameStr,
             );
         }
 

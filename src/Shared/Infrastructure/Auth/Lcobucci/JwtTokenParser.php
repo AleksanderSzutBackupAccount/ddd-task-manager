@@ -18,18 +18,19 @@ final readonly class JwtTokenParser implements TokenParserInterface
 {
     public function __construct(
         private LcobucciConfigProvider $configProvider,
-        private LoggerInterface $logger
-    ) {}
+        private LoggerInterface $logger,
+    ) {
+    }
 
     /**
-     * @param  non-empty-string  $token
+     * @param non-empty-string $token
      */
     public function parse(string $token): ?TokenPayload
     {
         try {
             $parsedToken = $this->getParsedToken($token);
 
-            if (! $this->getValidator()->validate($parsedToken, ...$this->getConstraints())) {
+            if (!$this->getValidator()->validate($parsedToken, ...$this->getConstraints())) {
                 return null;
             }
 
@@ -47,7 +48,7 @@ final readonly class JwtTokenParser implements TokenParserInterface
     }
 
     /**
-     * @param  non-empty-string  $plainToken
+     * @param non-empty-string $plainToken
      */
     private function getParsedToken(string $plainToken): UnencryptedToken
     {

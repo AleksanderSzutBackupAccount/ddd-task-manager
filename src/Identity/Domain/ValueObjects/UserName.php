@@ -6,4 +6,6 @@ namespace Src\Identity\Domain\ValueObjects;
 
 use Src\Shared\Domain\ValueObjects\StringValueObject;
 
-final readonly class UserName extends StringValueObject {}
+final readonly class UserName extends StringValueObject
+{
+}

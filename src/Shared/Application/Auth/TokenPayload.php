@@ -7,12 +7,13 @@ namespace Src\Shared\Application\Auth;
 final readonly class TokenPayload
 {
     /**
-     * @param  array<string, mixed>  $claims
+     * @param array<string, mixed> $claims
      */
     public function __construct(
         public string $subject,
-        public array $claims
-    ) {}
+        public array $claims,
+    ) {
+    }
 
     public function getClaim(string $name): mixed
     {

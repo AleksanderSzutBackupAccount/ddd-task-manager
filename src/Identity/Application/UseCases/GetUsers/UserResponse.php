@@ -9,13 +9,19 @@ use Src\Identity\Domain\UserCollection;
 
 final readonly class UserResponse
 {
-    public function __construct(private UserCollection $users) {}
+    public function __construct(private UserCollection $users)
+    {
+    }
 
     /**
      * @return array<mixed>
      */
     public function toResponse(): array
     {
-        return $this->users->map(fn (User $user) => ['id' => $user->id->value, 'name' => $user->name->value]);
+        return $this->users->map(fn (User $user) => [
+            'id' => $user->id->value,
+            'name' => $user->name->value,
+            'email' => $user->email->value,
+        ]);
     }
 }

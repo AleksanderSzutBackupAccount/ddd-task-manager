@@ -10,15 +10,15 @@ use Src\Project\Domain\ProjectRepository;
 use Src\Project\Domain\ValueObjects\ProjectId;
 use Src\Project\Domain\ValueObjects\ProjectSlug;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
-use Src\Shared\Domain\Bus\CommandInterface;
 
 final readonly class CreateProjectCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private ProjectRepository $projects) {}
-
-    public function handle(CommandInterface $command): void
+    public function __construct(private ProjectRepository $projects)
     {
-        /** @var CreateProjectCommand $command */
+    }
+
+    public function __invoke(CreateProjectCommand $command): void
+    {
         $project = Project::create(ProjectId::generate(), $command->name, new ProjectSlug($command->slug));
 
         $project->assignUser($command->userId);

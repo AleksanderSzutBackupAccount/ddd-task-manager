@@ -9,7 +9,9 @@ use Src\Project\Domain\Task;
 
 final readonly class TaskResponse
 {
-    public function __construct(private TaskCollection $tasks) {}
+    public function __construct(private TaskCollection $tasks)
+    {
+    }
 
     /**
      * @return array<string, mixed>[]

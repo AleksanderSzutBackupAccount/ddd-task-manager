@@ -7,7 +7,7 @@ namespace Src\Shared\Application\Auth;
 interface TokenGeneratorInterface
 {
     /**
-     * @param  array<string, mixed>  $claims
+     * @param array<string, mixed> $claims
      */
     public function generate(string $subject, array $claims = [], ?string $ttl = null): string;
 }

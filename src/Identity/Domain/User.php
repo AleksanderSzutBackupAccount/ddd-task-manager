@@ -18,7 +18,13 @@ final class User extends AggregateRoot
         public readonly UserName $name,
         public readonly UserEmail $email,
         public readonly UserExternalId $externalId,
-    ) {}
+    ) {
+    }
+
+    public function id(): UserId
+    {
+        return $this->id;
+    }
 
     public static function import(
         UserName $name,
@@ -27,7 +33,7 @@ final class User extends AggregateRoot
     {
         $entity = new self(new UserId(\Ramsey\Uuid\Uuid::uuid4()->toString()), $name, $email, $externalId);
 
-        $entity->record(new UserImportedEvent($entity->id));
+        $entity->apply(new UserImportedEvent($entity->id));
 
         return $entity;
     }

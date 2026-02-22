@@ -13,7 +13,9 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
 final readonly class MeQuery implements QueryInterface
 {
     /**
-     * @param  non-empty-string  $userId
+     * @param non-empty-string $userId
      */
-    public function __construct(public string $userId) {}
+    public function __construct(public string $userId)
+    {
+    }
 }

@@ -12,5 +12,7 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
  */
 final readonly class GetMembersQuery implements QueryInterface
 {
-    public function __construct(public ProjectId $projectId) {}
+    public function __construct(public ProjectId $projectId)
+    {
+    }
 }

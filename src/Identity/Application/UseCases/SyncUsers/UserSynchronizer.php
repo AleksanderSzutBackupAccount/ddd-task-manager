@@ -8,7 +8,9 @@ use Src\Identity\Application\Services\SyncUsersFromExternalService;
 
 final readonly class UserSynchronizer
 {
-    public function __construct(private SyncUsersFromExternalService $syncUsersFromExternalService) {}
+    public function __construct(private SyncUsersFromExternalService $syncUsersFromExternalService)
+    {
+    }
 
     public function sync(): void
     {

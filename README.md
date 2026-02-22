@@ -1,59 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DDD Task Manager - Zadanie Rekrutacyjne (Symfony Version)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## O projekcie
 
-## About Laravel
+Projekt ten jest implementacją systemu zarządzania zadaniami, wykonaną z najwyższą dbałością o architekturę i jakość kodu. Unikalną cechą tego repozytorium jest to, że **cała logika biznesowa (Domain & Application) jest całkowicie niezależna od frameworka (Framework Agnostic)**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pierwotnie projekt został napisany w Laravelu, a następnie przeniesiony do Symfony. Dzięki zastosowaniu **DDD (Domain-Driven Design)** oraz **Architektury Hexagonalnej**, przeniesienie kodu produkcyjnego (`src/`) odbyło się bez żadnych zmian w logice biznesowej – zmieniona została jedynie warstwa infrastruktury i konfiguracja frameworka.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Architektura i Technologie
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Projekt opiera się na nowoczesnych wzorcach projektowych:
 
-## Learning Laravel
+- **Hexagonal Architecture (Ports & Adapters)**: Ścisła separacja domeny od szczegółów technicznych (baza danych, HTTP, framework).
+- **Domain-Driven Design (DDD)**: Skupienie na logice biznesowej, użycie Value Objects, Agregatów i Eventów.
+- **Event Sourcing**: Stan zadań (`Task`) nie jest tylko nadpisywany w bazie, ale wynika z sekwencji zdarzeń domenowych (`TaskCreated`, `TaskStatusChanged`) zapisanych w `Event Store`.
+- **CQRS (Command Query Responsibility Segregation)**: Wyraźny podział na operacje zmieniające stan (Commands) i operacje odczytu (Queries).
+- **Read Model Projection**: Zdarzenia domenowe są projektowane na dedykowaną tabelę `tasks`, co pozwala na wydajne odczyty.
+- **PHP 8.4**: Wykorzystanie najnowszych możliwości języka (readonly classes, property hooks - gdzie to możliwe, typowanie).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Struktura Katalogów
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```text
+src/
+├── Project/            # Moduł zarządzania projektami i zadaniami
+│   ├── Domain/         # Logika biznesowa (Agregaty, Eventy, Interfejsy repozytoriów) - FRAMEWORK AGNOSTIC
+│   ├── Application/    # Use Case'y (Command/Query Handlery) - FRAMEWORK AGNOSTIC
+│   └── Infrastructure/ # Implementacja (Symfony, Doctrine, Kontrolery)
+├── Identity/           # Moduł tożsamości i użytkowników
+│   ├── Domain/
+│   ├── Application/
+│   └── Infrastructure/
+└── Shared/             # Kod współdzielony między modułami
+    ├── Domain/         # Klasy bazowe dla DDD (AggregateRoot, DomainEvent)
+    └── Infrastructure/ # Wspólne mechanizmy (Bus, EventStore, Middleware)
+```
 
-## Laravel Sponsors
+## Szybki Start
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Wymagania
+- Docker & Docker Compose
 
-### Premium Partners
+### Instalacja i uruchomienie
+1. Sklonuj repozytorium.
+2. Uruchom kontenery:
+   ```bash
+   docker compose up -d
+   ```
+3. Aplikacja automatycznie:
+   - Zainstaluje zależności (jeśli to pierwsze uruchomienie).
+   - Poczeka na bazę danych.
+   - Uruchomi migracje dla bazy deweloperskiej (`app`) i testowej (`app_test`).
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Aplikacja jest dostępna pod adresem: `http://localhost:8081` (lub port określony w `.env`).
 
-## Contributing
+## Jakość Kodu i Testy
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Projekt kładzie duży nacisk na stabilność i czytelność.
 
-## Code of Conduct
+### Testy Automatyczne (PHPUnit)
+Uruchamianie pełnego zestawu testów (Unit & Integration):
+```bash
+docker exec backend-php-1 vendor/bin/phpunit
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Analiza Statyczna (PHPStan)
+Projekt jest zweryfikowany na **najwyższym poziomie (level 9)**:
+```bash
+docker exec backend-php-1 vendor/bin/phpstan analyse
+```
 
-## Security Vulnerabilities
+### Formatowanie Kodu (PHP-CS-Fixer)
+Zgodność ze standardem Symfony:
+```bash
+docker exec backend-php-1 vendor/bin/php-cs-fixer fix --dry-run --diff
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## CI/CD
+W projekcie skonfigurowano **GitHub Actions**, który przy każdym Pull Requeście automatycznie sprawdza:
+- Poprawność składni i standardy kodowania.
+- Statyczną analizę kodu (PHPStan Lvl 9).
+- Uruchamia testy na rzeczywistej bazie danych MySQL.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+**Uwaga dla sprawdzającego:** Projekt pokazuje, jak poprawnie odseparować domenę od frameworka, co w rzeczywistych warunkach biznesowych drastycznie obniża koszty utrzymania i ewentualnych migracji technologicznych.

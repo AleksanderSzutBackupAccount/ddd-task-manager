@@ -13,5 +13,7 @@ use Src\Shared\Application\Bus\Query\QueryInterface;
  */
 final readonly class GetUserTasksQuery implements QueryInterface
 {
-    public function __construct(public UserId $userId) {}
+    public function __construct(public UserId $userId)
+    {
+    }
 }

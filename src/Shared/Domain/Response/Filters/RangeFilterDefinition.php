@@ -8,9 +8,10 @@ readonly class RangeFilterDefinition implements FilterDefinition
 {
     public function __construct(
         private ?string $unit,
-        private null|int|float $min,
-        private null|int|float $max,
-    ) {}
+        private int|float|null $min,
+        private int|float|null $max,
+    ) {
+    }
 
     public function toResponse(): array
     {

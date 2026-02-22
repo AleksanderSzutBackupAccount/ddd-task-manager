@@ -30,7 +30,7 @@ readonly class PositiveNumber implements ComparableInterface, StringableValueObj
     }
 
     /**
-     * @param  self  $compare
+     * @param self $compare
      */
     public function equals(ComparableInterface $compare): bool
     {

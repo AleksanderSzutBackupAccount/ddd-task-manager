@@ -9,5 +9,7 @@ use Src\Shared\Domain\Bus\DomainEvent;
 
 final readonly class UserImportedEvent implements DomainEvent
 {
-    public function __construct(public UserId $id) {}
+    public function __construct(public UserId $id)
+    {
+    }
 }

@@ -1,0 +1,4 @@
+# config/routes/identity.yaml
+identity_controllers:
+    resource: '../../src/Identity/Infrastructure/Symfony/Http/Controllers/'
+    type: attribute

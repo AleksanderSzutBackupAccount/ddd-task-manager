@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Project\Domain\ValueObjects;
 
-use InvalidArgumentException;
 use Src\Shared\Domain\ValueObjects\StringValueObject;
 
 final readonly class TaskStatus extends StringValueObject
@@ -23,8 +22,8 @@ final readonly class TaskStatus extends StringValueObject
 
     protected function validate(): void
     {
-        if (! in_array($this->value, self::VALID_STATUSES, true)) {
-            throw new InvalidArgumentException(sprintf('Invalid task status: %s', $this->value));
+        if (!in_array($this->value, self::VALID_STATUSES, true)) {
+            throw new \InvalidArgumentException(sprintf('Invalid task status: %s', $this->value));
         }
     }
 

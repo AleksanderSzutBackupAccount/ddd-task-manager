@@ -6,4 +6,6 @@ namespace Src\Identity\Domain\ValueObjects;
 
 use Src\Shared\Domain\ValueObjects\Email;
 
-final readonly class UserEmail extends Email {}
+final readonly class UserEmail extends Email
+{
+}

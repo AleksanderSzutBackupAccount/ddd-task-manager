@@ -15,26 +15,25 @@ use Src\Project\Domain\ValueObjects\TaskId;
 use Src\Project\Domain\ValueObjects\TaskSlug;
 use Src\Project\Domain\ValueObjects\TaskStatus;
 use Src\Shared\Application\Bus\CommandHandlerInterface;
-use Src\Shared\Domain\Bus\CommandInterface;
 
 final readonly class CreateTaskCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ProjectRepository $projects,
         private TaskWriteRepository $tasks,
-        private TaskReadRepository $taskReadRepository
-    ) {}
+        private TaskReadRepository $taskReadRepository,
+    ) {
+    }
 
-    public function handle(CommandInterface $command): void
+    public function __invoke(CreateTaskCommand $command): void
     {
-        /** @var CreateTaskCommand $command */
         $project = $this->projects->findBySlug(new ProjectSlug($command->projectSlug));
-        if ($project === null) {
-            throw new ProjectNotFoundException;
+        if (null === $project) {
+            throw new ProjectNotFoundException();
         }
 
-        if ($command->assignedUserId !== null && ! $project->isUserAssigned($command->assignedUserId)) {
-            throw new UserNotInProjectException;
+        if (null !== $command->assignedUserId && !$project->isUserAssigned($command->assignedUserId)) {
+            throw new UserNotInProjectException();
         }
 
         $taskId = TaskId::generate();

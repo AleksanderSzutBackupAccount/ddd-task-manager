@@ -14,7 +14,7 @@ final readonly class TaskStatusChanged extends DomainEventStored
         public string $newStatus,
         ?string $eventId = null,
         ?\DateTimeImmutable $occurredOn = null,
-        int $version = 0
+        int $version = 0,
     ) {
         parent::__construct($taskId, $eventId, $occurredOn, $version);
     }
@@ -29,12 +29,12 @@ final readonly class TaskStatusChanged extends DomainEventStored
         array $body,
         string $eventId,
         \DateTimeImmutable $occurredOn,
-        int $version = 0
+        int $version = 0,
     ): self {
         return new self(
             $aggregateId,
-            (string) $body['oldStatus'],
-            (string) $body['newStatus'],
+            (string) ($body['oldStatus'] ?? ''),
+            (string) ($body['newStatus'] ?? ''),
             $eventId,
             $occurredOn,
             $version

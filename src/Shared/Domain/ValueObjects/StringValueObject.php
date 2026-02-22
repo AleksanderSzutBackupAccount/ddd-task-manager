@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Src\Shared\Domain\ValueObjects;
 
 use Src\Shared\Domain\ComparableInterface;
-use Stringable;
 
-abstract readonly class StringValueObject implements ComparableInterface, Stringable, ValueObjectInterface
+abstract readonly class StringValueObject implements ComparableInterface, \Stringable, ValueObjectInterface
 {
-    public function __construct(public string $value)
+    final public function __construct(public string $value)
     {
         $this->validate();
     }
@@ -26,7 +25,7 @@ abstract readonly class StringValueObject implements ComparableInterface, String
 
     public static function fromNullable(?string $value): ?static
     {
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
 
@@ -39,12 +38,14 @@ abstract readonly class StringValueObject implements ComparableInterface, String
     }
 
     /**
-     * @param  self  $compare
+     * @param self $compare
      */
     public function equals(ComparableInterface $compare): bool
     {
         return $this->value === $compare->value;
     }
 
-    protected function validate(): void {}
+    protected function validate(): void
+    {
+    }
 }

@@ -31,7 +31,9 @@ final class Task extends AggregateRoot
 
     private ?string $assignedUserId;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public static function create(
         TaskId $id,
@@ -40,9 +42,9 @@ final class Task extends AggregateRoot
         string $name,
         string $description,
         TaskStatus $status,
-        ?UserId $assignedUserId
+        ?UserId $assignedUserId,
     ): self {
-        $task = new self;
+        $task = new self();
         $task->recordAndApply(new TaskCreated(
             $id->value(),
             $projectId->value(),
@@ -58,7 +60,7 @@ final class Task extends AggregateRoot
 
     public function changeStatus(TaskStatus $newStatus): void
     {
-        if (! $this->status->equals($newStatus)) {
+        if (!$this->status->equals($newStatus)) {
             $this->recordAndApply(new TaskStatusChanged(
                 $this->id->value(),
                 $this->status->value(),
@@ -93,11 +95,11 @@ final class Task extends AggregateRoot
     }
 
     /**
-     * @param  DomainEventStored[]  $events
+     * @param DomainEventStored[] $events
      */
     public static function reconstitute(array $events): self
     {
-        $task = new self;
+        $task = new self();
         $maxVersion = 0;
         foreach ($events as $event) {
             $task->apply($event);

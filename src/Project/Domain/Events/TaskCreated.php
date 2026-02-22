@@ -18,7 +18,7 @@ final readonly class TaskCreated extends DomainEventStored
         public ?string $assignedUserId,
         ?string $eventId = null,
         ?\DateTimeImmutable $occurredOn = null,
-        int $version = 0
+        int $version = 0,
     ) {
         parent::__construct($id, $eventId, $occurredOn, $version);
     }
@@ -33,15 +33,15 @@ final readonly class TaskCreated extends DomainEventStored
         array $body,
         string $eventId,
         \DateTimeImmutable $occurredOn,
-        int $version = 0
+        int $version = 0,
     ): self {
         return new self(
             $aggregateId,
-            (string) $body['projectId'],
-            (string) $body['slug'],
-            (string) $body['name'],
-            (string) $body['description'],
-            (string) $body['status'],
+            (string) ($body['projectId'] ?? ''),
+            (string) ($body['slug'] ?? ''),
+            (string) ($body['name'] ?? ''),
+            (string) ($body['description'] ?? ''),
+            (string) ($body['status'] ?? ''),
             isset($body['assignedUserId']) ? (string) $body['assignedUserId'] : null,
             $eventId,
             $occurredOn,

@@ -13,6 +13,7 @@ final readonly class CreateTaskCommand implements CommandInterface
         public string $projectSlug,
         public string $name,
         public string $description,
-        public ?UserId $assignedUserId
-    ) {}
+        public ?UserId $assignedUserId,
+    ) {
+    }
 }

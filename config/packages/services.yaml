@@ -1,0 +1,120 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            iterable $queryHandlers: !tagged_iterator src.query_handler
+            iterable $commandBus: !tagged_iterator src.command_handler
+
+    Src\Shared\:
+        resource: '../../src/Shared'
+    Src\Identity\:
+        resource: '../../src/Identity'
+    Src\Project\:
+        resource: '../../src/Project'
+
+    _instanceof:
+        Src\Shared\Application\Bus\CommandHandlerInterface:
+            tags: ['src.command_handler']
+
+        Src\Shared\Application\Bus\Query\QueryHandlerInterface:
+            tags: ['src.query_handler']
+
+    Src\Shared\Infrastructure\Symfony\Bus\SymfonyQueryBus:
+        arguments:
+            $queryHandlers: !tagged_iterator src.query_handler
+
+    Src\Shared\Infrastructure\Symfony\Bus\SymfonyCommandHandler:
+        arguments:
+            $commandHandlers: !tagged_iterator src.command_handler
+
+    # Repozytoria (upublicznienie dla testów)
+    Src\Identity\Domain\UserRepository:
+        class: Src\Identity\Infrastructure\Symfony\Persistence\UserSymfonyRepository
+        public: true
+
+    Src\Project\Domain\ProjectRepository:
+        class: Src\Project\Infrastructure\Symfony\Persistence\ProjectSymfonyRepository
+        public: true
+
+    # Doctrine Services dla testów
+    Doctrine\ORM\EntityManagerInterface:
+        alias: 'doctrine.orm.entity_manager'
+        public: true
+
+    Src\Project\Domain\TaskReadRepository:
+        class: Src\Project\Infrastructure\Symfony\Persistence\TaskSymfonyReadRepository
+
+    Src\Project\Domain\TaskWriteRepository:
+        class: Src\Project\Infrastructure\Symfony\Persistence\EventSourcedTaskSymfonyWriteRepository
+
+    Src\Project\Domain\MemberRepository:
+        class: Src\Project\Infrastructure\Symfony\Persistence\MemberSymfonyRepository
+
+
+
+    Src\Shared\Domain\EventStore\EventStore:
+        class: Src\Shared\Infrastructure\Symfony\Persistence\DoctrineEventStore
+        public: true
+
+    Src\Shared\Domain\Bus\EventProjector:
+        class: Src\Project\Infrastructure\Symfony\Projectors\TaskSymfonyProjector
+
+
+    Src\Shared\Infrastructure\Auth\Lcobucci\LcobucciConfigProvider:
+        arguments:
+            $secret: '%env(APP_SECRET)%'
+
+    Src\Identity\Infrastructure\Lcobucci\LcobucciConfigProvider:
+        arguments:
+            $secret: '%env(APP_SECRET)%'
+
+    # Monolog lub inny standardowy logger PSR
+    Psr\Log\LoggerInterface:
+        alias: 'logger'
+
+    # Mapowanie interfejsu aplikacji na PSR
+    Src\Shared\Application\Log\LoggerInterface:
+        class: Src\Shared\Infrastructure\Log\PsrLogger
+        arguments:
+            $logger: '@Psr\Log\LoggerInterface'
+
+    Src\Shared\Infrastructure\Symfony\Http\Middleware\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 255 }
+
+    Src\Shared\Infrastructure\Symfony\Http\Middleware\AuthListener:
+        arguments:
+            $tokenParser: '@Src\Identity\Application\Ports\TokenParserInterface'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 32 }
+
+    Src\Identity\Application\Ports\TokenGeneratorInterface:
+        alias: Src\Identity\Infrastructure\Lcobucci\JwtTokenGenerator
+        public: true
+
+    Src\Identity\Application\Ports\TokenParserInterface:
+        alias: Src\Identity\Infrastructure\Lcobucci\JwtTokenParser
+        public: true
+
+    # Kontrolery jako serwisy
+    Src\Project\Infrastructure\Symfony\Http\Controllers\:
+        resource: '../../src/Project/Infrastructure/Symfony/Http/Controllers/'
+        tags: ['controller.service_arguments']
+
+    GuzzleHttp\Client:
+        arguments:
+            $config:
+                base_uri: 'https://jsonplaceholder.typicode.com'
+                timeout: 2.0
+
+    GuzzleHttp\ClientInterface:
+        alias: GuzzleHttp\Client
+    Src\Identity\Infrastructure\Symfony\Http\Controllers\:
+        resource: '../../src/Identity/Infrastructure/Symfony/Http/Controllers/'
+        tags: ['controller.service_arguments']
+when@test:
+    services:
+        Src\Identity\Application\Ports\ExternalUserProvider:
+            public: true

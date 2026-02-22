@@ -9,7 +9,8 @@ interface QueryBusInterface
     /**
      * @template R
      *
-     * @param  QueryInterface<R>  $query
+     * @param QueryInterface<R> $query
+     *
      * @return R
      */
     public function ask(QueryInterface $query): mixed;
